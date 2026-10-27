@@ -1,0 +1,2566 @@
+{
+    "meta":  {
+                 "doc":  "Opcode \u0026 struktur data protokol ECU Bintang Racing Team Juken 5 Plus",
+                 "target_assembly":  "Juken_5.exe",
+                 "target_path":  "C:\\Program Files\\Bintang Racing Team\\Juken 5 Plus (EN)\\Juken_5.exe",
+                 "target_version":  "1.0.18.18",
+                 "target_sha256":  "10150ed6d3c315277cbe55342af7498bce9c46abf2707191b29f48b8b86c3112",
+                 "extracted_on":  "2026-10-27",
+                 "evidence_rea":  [
+                                      "ev_ae30fa63a024a99d3043cc2ef72a06b4248e3566af16190e0beefc20f1c06f4c (inspect_managed_artifact)",
+                                      "ev_5407f3e4cc08b6715296d7d3d180df389658f94f4a93d12cc5b18a5572febd52 (inspect_managed_members SerialCommHandler)"
+                                  ],
+                 "method":  "REA managed static inspection + dump CIL read-only via reflection (tanpa eksekusi kode target)",
+                 "tx_encoding":  "ASCII: \u003cHEX\u003e atau \u003cHEX\u003e;\u003cparam\u003e diakhiri CRLF; HEX = cmd.ToString(\"X\") (huruf besar, tanpa padding nol)",
+                 "rx_framing":  "split per byte 0x0A (LF); potongan \u003e 2 byte diterima; charset filter non-bulk: [0-9A-Za-z;., +=-]",
+                 "hex_case_note":  "AddCommReply/AddCommMessage memakai HEX huruf besar (\"X\"); literal mentah dari app ada yang huruf kecil (\"150d;0\") â€” sisi ECU diduga case-insensitive (belum diverifikasi)"
+             },
+    "command_families":  {
+                             "ack":  [
+                                         {
+                                             "name":  "ACK",
+                                             "dec":  6656,
+                                             "hex":  "0x1A00"
+                                         },
+                                         {
+                                             "name":  "ACK_PING",
+                                             "dec":  6912,
+                                             "hex":  "0x1B00"
+                                         },
+                                         {
+                                             "name":  "ACK_BUSY",
+                                             "dec":  7168,
+                                             "hex":  "0x1C00"
+                                         },
+                                         {
+                                             "name":  "ECHO_ACK",
+                                             "dec":  6912,
+                                             "hex":  "0x1B00"
+                                         },
+                                         {
+                                             "name":  "FEEDBACK_ECHO_ACK",
+                                             "dec":  6913,
+                                             "hex":  "0x1B01"
+                                         }
+                                     ],
+                             "read":  [
+                                          {
+                                              "name":  "READ_FUEL_BASE",
+                                              "dec":  5633,
+                                              "hex":  "0x1601"
+                                          },
+                                          {
+                                              "name":  "READ_FUEL_COR1",
+                                              "dec":  5634,
+                                              "hex":  "0x1602"
+                                          },
+                                          {
+                                              "name":  "READ_FUEL_COR2",
+                                              "dec":  5794,
+                                              "hex":  "0x16A2"
+                                          },
+                                          {
+                                              "name":  "READ_FUEL_INJT",
+                                              "dec":  5635,
+                                              "hex":  "0x1603"
+                                          },
+                                          {
+                                              "name":  "READ_IGN_ANGLE",
+                                              "dec":  5637,
+                                              "hex":  "0x1605"
+                                          },
+                                          {
+                                              "name":  "READ_HISTORY",
+                                              "dec":  5648,
+                                              "hex":  "0x1610"
+                                          },
+                                          {
+                                              "name":  "READ_PATTERN",
+                                              "dec":  5652,
+                                              "hex":  "0x1614"
+                                          },
+                                          {
+                                              "name":  "READ_USER_DEF",
+                                              "dec":  5638,
+                                              "hex":  "0x1606"
+                                          },
+                                          {
+                                              "name":  "PC_READ_USER_DEF",
+                                              "dec":  5639,
+                                              "hex":  "0x1607"
+                                          },
+                                          {
+                                              "name":  "PC_READ_SENSOR",
+                                              "dec":  5641,
+                                              "hex":  "0x1609"
+                                          },
+                                          {
+                                              "name":  "READ_ECU_MODEL",
+                                              "dec":  5654,
+                                              "hex":  "0x1616"
+                                          },
+                                          {
+                                              "name":  "PC_READ_USER_DEF_2",
+                                              "dec":  5655,
+                                              "hex":  "0x1617"
+                                          },
+                                          {
+                                              "name":  "PC_READ_USER_DEF_3",
+                                              "dec":  5656,
+                                              "hex":  "0x1618"
+                                          },
+                                          {
+                                              "name":  "ENTER_LIVE",
+                                              "dec":  5642,
+                                              "hex":  "0x160A"
+                                          },
+                                          {
+                                              "name":  "EXIT_LIVE",
+                                              "dec":  5643,
+                                              "hex":  "0x160B"
+                                          },
+                                          {
+                                              "name":  "ENTER_AUTO_TUNE",
+                                              "dec":  5644,
+                                              "hex":  "0x160C"
+                                          },
+                                          {
+                                              "name":  "EXIT_AUTO_TUNE",
+                                              "dec":  5645,
+                                              "hex":  "0x160D"
+                                          },
+                                          {
+                                              "name":  "ENTER_SMART_TUNE",
+                                              "dec":  5646,
+                                              "hex":  "0x160E"
+                                          },
+                                          {
+                                              "name":  "EXIT_SMART_TUNE",
+                                              "dec":  5647,
+                                              "hex":  "0x160F"
+                                          },
+                                          {
+                                              "name":  "RMT_READ_HISTORY",
+                                              "dec":  5658,
+                                              "hex":  "0x161A"
+                                          },
+                                          {
+                                              "name":  "SEND_HISTORY_RMT",
+                                              "dec":  38426,
+                                              "hex":  "0x961A"
+                                          },
+                                          {
+                                              "name":  "END_HISTORY",
+                                              "dec":  6682,
+                                              "hex":  "0x1A1A"
+                                          },
+                                          {
+                                              "name":  "SAVE_EDIT_HISTORY",
+                                              "dec":  9858,
+                                              "hex":  "0x2682"
+                                          },
+                                          {
+                                              "name":  "READ_AFR_STD",
+                                              "dec":  5664,
+                                              "hex":  "0x1620"
+                                          },
+                                          {
+                                              "name":  "SEND_AFR_STD",
+                                              "dec":  38432,
+                                              "hex":  "0x9620"
+                                          },
+                                          {
+                                              "name":  "RESET_LOGGER",
+                                              "dec":  5682,
+                                              "hex":  "0x1632"
+                                          },
+                                          {
+                                              "name":  "READ_REC_LOGGER",
+                                              "dec":  5683,
+                                              "hex":  "0x1633"
+                                          },
+                                          {
+                                              "name":  "READ_REC_LOGGER2",
+                                              "dec":  5684,
+                                              "hex":  "0x1634"
+                                          },
+                                          {
+                                              "name":  "READ_LOG_ADDR",
+                                              "dec":  5685,
+                                              "hex":  "0x1635"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_ALL",
+                                              "dec":  5686,
+                                              "hex":  "0x1636"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_ALL_PARAMS",
+                                              "dec":  5743,
+                                              "hex":  "0x166F"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR",
+                                              "dec":  5729,
+                                              "hex":  "0x1661"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_EOT",
+                                              "dec":  5730,
+                                              "hex":  "0x1662"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR_EOT",
+                                              "dec":  5731,
+                                              "hex":  "0x1663"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_VBAT",
+                                              "dec":  5732,
+                                              "hex":  "0x1664"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR_VBAT",
+                                              "dec":  5733,
+                                              "hex":  "0x1665"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_EOT_VBAT",
+                                              "dec":  5734,
+                                              "hex":  "0x1666"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR_EOT_VBAT",
+                                              "dec":  5735,
+                                              "hex":  "0x1667"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_MAP",
+                                              "dec":  5736,
+                                              "hex":  "0x1668"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR_MAP",
+                                              "dec":  5737,
+                                              "hex":  "0x1669"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_EOT_MAP",
+                                              "dec":  5738,
+                                              "hex":  "0x166A"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR_EOT_MAP",
+                                              "dec":  5739,
+                                              "hex":  "0x166B"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_VBAT_MAP",
+                                              "dec":  5740,
+                                              "hex":  "0x166C"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_AFR_VBAT_MAP",
+                                              "dec":  5741,
+                                              "hex":  "0x166D"
+                                          },
+                                          {
+                                              "name":  "READ_LOGGER_EOT_VBAT_MAP",
+                                              "dec":  5742,
+                                              "hex":  "0x166E"
+                                          }
+                                      ],
+                             "write":  [
+                                           {
+                                               "name":  "SAVE_FUEL_BASE",
+                                               "dec":  9729,
+                                               "hex":  "0x2601"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_COR1",
+                                               "dec":  9730,
+                                               "hex":  "0x2602"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_COR2",
+                                               "dec":  9890,
+                                               "hex":  "0x26A2"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_INJT",
+                                               "dec":  9731,
+                                               "hex":  "0x2603"
+                                           },
+                                           {
+                                               "name":  "SAVE_IGN_ANGLE",
+                                               "dec":  9733,
+                                               "hex":  "0x2605"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_AS_BM",
+                                               "dec":  9738,
+                                               "hex":  "0x260A"
+                                           },
+                                           {
+                                               "name":  "SAVE_TEMP_DATA",
+                                               "dec":  9739,
+                                               "hex":  "0x260B"
+                                           },
+                                           {
+                                               "name":  "FACTORY_RESET",
+                                               "dec":  9740,
+                                               "hex":  "0x260C"
+                                           },
+                                           {
+                                               "name":  "SAVE_AUTO_CALCULATING",
+                                               "dec":  9744,
+                                               "hex":  "0x2610"
+                                           },
+                                           {
+                                               "name":  "GENERATE_PATTERN",
+                                               "dec":  9748,
+                                               "hex":  "0x2614"
+                                           },
+                                           {
+                                               "name":  "SAVE_EDIT_PATTERN",
+                                               "dec":  9749,
+                                               "hex":  "0x2615"
+                                           },
+                                           {
+                                               "name":  "READ_TPS_CAL",
+                                               "dec":  17921,
+                                               "hex":  "0x4601"
+                                           },
+                                           {
+                                               "name":  "READ_DIAG2",
+                                               "dec":  17922,
+                                               "hex":  "0x4602"
+                                           },
+                                           {
+                                               "name":  "READ_ENGINE_RUN",
+                                               "dec":  17923,
+                                               "hex":  "0x4603"
+                                           },
+                                           {
+                                               "name":  "READ_ENGINE_STOP",
+                                               "dec":  17925,
+                                               "hex":  "0x4605"
+                                           },
+                                           {
+                                               "name":  "READ_TIME_RUN",
+                                               "dec":  17926,
+                                               "hex":  "0x4606"
+                                           },
+                                           {
+                                               "name":  "CHECK_TPS_RANGE",
+                                               "dec":  18016,
+                                               "hex":  "0x4660"
+                                           },
+                                           {
+                                               "name":  "SAVE_EMAP_RANGE",
+                                               "dec":  13825,
+                                               "hex":  "0x3601"
+                                           },
+                                           {
+                                               "name":  "SAVE_RESET_MAP",
+                                               "dec":  13826,
+                                               "hex":  "0x3602"
+                                           },
+                                           {
+                                               "name":  "SAVE_EMAP",
+                                               "dec":  13827,
+                                               "hex":  "0x3603"
+                                           },
+                                           {
+                                               "name":  "SAVE_AUTO_CORRECTION",
+                                               "dec":  13828,
+                                               "hex":  "0x3604"
+                                           },
+                                           {
+                                               "name":  "SAVE_LIMITER",
+                                               "dec":  13829,
+                                               "hex":  "0x3605"
+                                           },
+                                           {
+                                               "name":  "SAVE_AUTO_IGN",
+                                               "dec":  13830,
+                                               "hex":  "0x3606"
+                                           },
+                                           {
+                                               "name":  "SAVE_CORE",
+                                               "dec":  13831,
+                                               "hex":  "0x3607"
+                                           },
+                                           {
+                                               "name":  "SAVE_TURBO",
+                                               "dec":  13832,
+                                               "hex":  "0x3608"
+                                           },
+                                           {
+                                               "name":  "SAVE_IMOB",
+                                               "dec":  13833,
+                                               "hex":  "0x3609"
+                                           },
+                                           {
+                                               "name":  "SAVE_DWELL",
+                                               "dec":  13834,
+                                               "hex":  "0x360A"
+                                           },
+                                           {
+                                               "name":  "SAVE_JET_FUEL",
+                                               "dec":  13835,
+                                               "hex":  "0x360B"
+                                           },
+                                           {
+                                               "name":  "SAVE_TPS_RATE",
+                                               "dec":  13836,
+                                               "hex":  "0x360C"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_START",
+                                               "dec":  13837,
+                                               "hex":  "0x360D"
+                                           },
+                                           {
+                                               "name":  "SAVE_WARM_UP",
+                                               "dec":  13838,
+                                               "hex":  "0x360E"
+                                           },
+                                           {
+                                               "name":  "SAVE_RPM_IDLE",
+                                               "dec":  13839,
+                                               "hex":  "0x360F"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_IDLE",
+                                               "dec":  13840,
+                                               "hex":  "0x3610"
+                                           },
+                                           {
+                                               "name":  "SAVE_FUEL_DEC",
+                                               "dec":  13841,
+                                               "hex":  "0x3611"
+                                           },
+                                           {
+                                               "name":  "SAVE_TPS_INITIAL",
+                                               "dec":  13842,
+                                               "hex":  "0x3612"
+                                           },
+                                           {
+                                               "name":  "SAVE_TPS_WOT",
+                                               "dec":  13843,
+                                               "hex":  "0x3613"
+                                           },
+                                           {
+                                               "name":  "SAVE_SHIFTER",
+                                               "dec":  13844,
+                                               "hex":  "0x3614"
+                                           },
+                                           {
+                                               "name":  "SAVE_JJSORE_SET",
+                                               "dec":  13845,
+                                               "hex":  "0x3615"
+                                           },
+                                           {
+                                               "name":  "SAVE_JJSORE_RANGE",
+                                               "dec":  13846,
+                                               "hex":  "0x3616"
+                                           },
+                                           {
+                                               "name":  "SAVE_VVA",
+                                               "dec":  13847,
+                                               "hex":  "0x3617"
+                                           },
+                                           {
+                                               "name":  "SAVE_SMART_TUNE",
+                                               "dec":  13848,
+                                               "hex":  "0x3618"
+                                           },
+                                           {
+                                               "name":  "SAVE_AUTO1_TUNE",
+                                               "dec":  13849,
+                                               "hex":  "0x3619"
+                                           },
+                                           {
+                                               "name":  "SAVE_FAN_TEMP",
+                                               "dec":  13850,
+                                               "hex":  "0x361A"
+                                           },
+                                           {
+                                               "name":  "SAVE_BANK_ANGLE",
+                                               "dec":  13851,
+                                               "hex":  "0x361B"
+                                           },
+                                           {
+                                               "name":  "SAVE_TURBO_ENGINE",
+                                               "dec":  13852,
+                                               "hex":  "0x361C"
+                                           },
+                                           {
+                                               "name":  "SAVE_SHIFT_LIGHT",
+                                               "dec":  13853,
+                                               "hex":  "0x361D"
+                                           },
+                                           {
+                                               "name":  "SAVE_AUTO_PROTECT",
+                                               "dec":  13854,
+                                               "hex":  "0x361E"
+                                           },
+                                           {
+                                               "name":  "SAVE_AUTO_TUNE",
+                                               "dec":  13872,
+                                               "hex":  "0x3630"
+                                           },
+                                           {
+                                               "name":  "AUTO_TUNE_RUN",
+                                               "dec":  13873,
+                                               "hex":  "0x3631"
+                                           },
+                                           {
+                                               "name":  "AUTO_TUNE_STOP",
+                                               "dec":  13874,
+                                               "hex":  "0x3632"
+                                           },
+                                           {
+                                               "name":  "SAVE_AGES_MAP",
+                                               "dec":  13875,
+                                               "hex":  "0x3633"
+                                           },
+                                           {
+                                               "name":  "READ_AGES_MAP",
+                                               "dec":  13876,
+                                               "hex":  "0x3634"
+                                           },
+                                           {
+                                               "name":  "MAINTAIN_START",
+                                               "dec":  14336,
+                                               "hex":  "0x3800"
+                                           },
+                                           {
+                                               "name":  "MAINTAIN_STOP",
+                                               "dec":  14592,
+                                               "hex":  "0x3900"
+                                           },
+                                           {
+                                               "name":  "MAINTAIN_REPORT",
+                                               "dec":  47104,
+                                               "hex":  "0xB800"
+                                           }
+                                       ],
+                             "test":  [
+                                          {
+                                              "name":  "TEST_PUMP",
+                                              "dec":  20481,
+                                              "hex":  "0x5001"
+                                          },
+                                          {
+                                              "name":  "TEST_VVA",
+                                              "dec":  20482,
+                                              "hex":  "0x5002"
+                                          },
+                                          {
+                                              "name":  "STOP_ENGINE",
+                                              "dec":  20483,
+                                              "hex":  "0x5003"
+                                          },
+                                          {
+                                              "name":  "TEST_LAMP",
+                                              "dec":  20484,
+                                              "hex":  "0x5004"
+                                          },
+                                          {
+                                              "name":  "START_ENGINE",
+                                              "dec":  20487,
+                                              "hex":  "0x5007"
+                                          },
+                                          {
+                                              "name":  "TEST_MIL",
+                                              "dec":  20490,
+                                              "hex":  "0x500A"
+                                          },
+                                          {
+                                              "name":  "TEST_TEMP_IND",
+                                              "dec":  20491,
+                                              "hex":  "0x500B"
+                                          },
+                                          {
+                                              "name":  "TEST_FAN",
+                                              "dec":  20492,
+                                              "hex":  "0x500C"
+                                          },
+                                          {
+                                              "name":  "TEST_CHOKE",
+                                              "dec":  20493,
+                                              "hex":  "0x500D"
+                                          },
+                                          {
+                                              "name":  "TEST_TACHO",
+                                              "dec":  20494,
+                                              "hex":  "0x500E"
+                                          },
+                                          {
+                                              "name":  "EXECUTE_UPDATE",
+                                              "dec":  20489,
+                                              "hex":  "0x5009"
+                                          },
+                                          {
+                                              "name":  "SEND_LOGGER",
+                                              "dec":  38448,
+                                              "hex":  "0x9630"
+                                          },
+                                          {
+                                              "name":  "END_LOGGER",
+                                              "dec":  38450,
+                                              "hex":  "0x9632"
+                                          },
+                                          {
+                                              "name":  "SEND_REC_ADDR",
+                                              "dec":  38453,
+                                              "hex":  "0x9635"
+                                          }
+                                      ],
+                             "bulk_command":  [
+                                                  {
+                                                      "name":  "REQ_CRC",
+                                                      "dec":  5376,
+                                                      "hex":  "0x1500"
+                                                  },
+                                                  {
+                                                      "name":  "REQ_PARAM",
+                                                      "dec":  5377,
+                                                      "hex":  "0x1501"
+                                                  },
+                                                  {
+                                                      "name":  "REQ_MAP",
+                                                      "dec":  5378,
+                                                      "hex":  "0x1502"
+                                                  },
+                                                  {
+                                                      "name":  "RCV_PARAM",
+                                                      "dec":  5379,
+                                                      "hex":  "0x1503"
+                                                  },
+                                                  {
+                                                      "name":  "RCV_MAP",
+                                                      "dec":  5380,
+                                                      "hex":  "0x1504"
+                                                  },
+                                                  {
+                                                      "name":  "REQ_LOG_SIZE",
+                                                      "dec":  5381,
+                                                      "hex":  "0x1505"
+                                                  },
+                                                  {
+                                                      "name":  "REQ_LOG_DATA",
+                                                      "dec":  5743,
+                                                      "hex":  "0x166F"
+                                                  },
+                                                  {
+                                                      "name":  "REQ_NOT_CALC",
+                                                      "dec":  5383,
+                                                      "hex":  "0x1507"
+                                                  }
+                                              ],
+                             "bulk_reply":  [
+                                                {
+                                                    "name":  "FeedBack_CRC",
+                                                    "dec":  38144,
+                                                    "hex":  "0x9500"
+                                                },
+                                                {
+                                                    "name":  "SEND_CRC_PARAM",
+                                                    "dec":  38145,
+                                                    "hex":  "0x9501"
+                                                },
+                                                {
+                                                    "name":  "SEND_CRC_MAP",
+                                                    "dec":  38146,
+                                                    "hex":  "0x9502"
+                                                },
+                                                {
+                                                    "name":  "SEND_LOG_SIZE",
+                                                    "dec":  38149,
+                                                    "hex":  "0x9505"
+                                                }
+                                            ],
+                             "reply":  [
+                                           {
+                                               "name":  "FEEDBACK_READ_USER_DEF_1",
+                                               "dec":  38406,
+                                               "hex":  "0x9606"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_USER_DEF_2",
+                                               "dec":  38422,
+                                               "hex":  "0x9616"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_FUEL_BASE",
+                                               "dec":  38401,
+                                               "hex":  "0x9601"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_FUEL_COR1",
+                                               "dec":  38402,
+                                               "hex":  "0x9602"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_FUEL_COR2",
+                                               "dec":  38562,
+                                               "hex":  "0x96A2"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_FUEL_INJT",
+                                               "dec":  38403,
+                                               "hex":  "0x9603"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_IGN_ANGLE",
+                                               "dec":  38405,
+                                               "hex":  "0x9605"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_HISTORY",
+                                               "dec":  38416,
+                                               "hex":  "0x9610"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_PATTERN",
+                                               "dec":  38420,
+                                               "hex":  "0x9614"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_TPS_CAL",
+                                               "dec":  42497,
+                                               "hex":  "0xA601"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_DIAG2",
+                                               "dec":  42498,
+                                               "hex":  "0xA602"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_ENGINE_RUN",
+                                               "dec":  42499,
+                                               "hex":  "0xA603"
+                                           },
+                                           {
+                                               "name":  "FEEDBACK_READ_ENGINE_STOP",
+                                               "dec":  42501,
+                                               "hex":  "0xA605"
+                                           },
+                                           {
+                                               "name":  "ECU_SEND_REG_OK",
+                                               "dec":  42503,
+                                               "hex":  "0xA607"
+                                           },
+                                           {
+                                               "name":  "ECU_SEND_VALID",
+                                               "dec":  42504,
+                                               "hex":  "0xA608"
+                                           },
+                                           {
+                                               "name":  "SEND_ENGINE_RUN",
+                                               "dec":  42499,
+                                               "hex":  "0xA603"
+                                           },
+                                           {
+                                               "name":  "RESET_TIME_REC",
+                                               "dec":  42512,
+                                               "hex":  "0xA610"
+                                           },
+                                           {
+                                               "name":  "SAVE_TIMEOUT_SERVICE",
+                                               "dec":  13878,
+                                               "hex":  "0x3636"
+                                           },
+                                           {
+                                               "name":  "DISP_TIME_RUN",
+                                               "dec":  42502,
+                                               "hex":  "0xA606"
+                                           }
+                                       ],
+                             "other":  [
+                                           {
+                                               "name":  "ENTER_BOOTLOADER",
+                                               "dec":  29481,
+                                               "hex":  "0x7329"
+                                           }
+                                       ]
+                         },
+    "command_to_expected_reply":  {
+                                      "1601":  "9601",
+                                      "1602":  "9602",
+                                      "16A2":  "96A2",
+                                      "1603":  "9603",
+                                      "1605":  "9605",
+                                      "1610":  "9610",
+                                      "1614":  "9614",
+                                      "1606":  "9606",
+                                      "1607":  "9606",
+                                      "1616":  "9616",
+                                      "1617":  "9616",
+                                      "1620":  "9620",
+                                      "1500":  "9500"
+                                  },
+    "dispatch_first_token":  [
+                                 {
+                                     "code":  "9113",
+                                     "behavior":  "data-log: ListIndexDataLog.Add(newData[1]) (indeks log diterima)",
+                                     "evidence":  "Form1.SetText IL_064E-\u003eIL_076F"
+                                 },
+                                 {
+                                     "code":  "9606",
+                                     "behavior":  "FEEDBACK_READ_USER_DEF_1: hentikan timer2 (langkah baca user-def/log)",
+                                     "evidence":  "Form1.SetText IL_065F-\u003eIL_0787"
+                                 },
+                                 {
+                                     "code":  "9616",
+                                     "behavior":  "FEEDBACK_READ_USER_DEF_2 (balasan 1617): persiapan masuk live, set var_awal/lanjut/pilihan, isLiveState=0",
+                                     "evidence":  "Form1.SetText IL_0670-\u003eIL_07C2..IL_0847"
+                                 },
+                                 {
+                                     "code":  "9618",
+                                     "behavior":  "tutup progress window GetMapAwal",
+                                     "evidence":  "Form1.SetText IL_0681-\u003eIL_0848"
+                                 },
+                                 {
+                                     "code":  "A603",
+                                     "behavior":  "FRAME TELEMETRI/STATUS: cabang assigndataStatus (parse \"depan\") atau masuk_live (parse gauge live)",
+                                     "evidence":  "Form1.SetText IL_0692-\u003eIL_0854"
+                                 },
+                                 {
+                                     "code":  "1B01",
+                                     "behavior":  "FEEDBACK_ECHO_ACK: ConnectionState=1, time_echo direset (keepalive OK)",
+                                     "evidence":  "Form1.SetText IL_06A3-\u003eIL_0DEA, IL_0E48"
+                                 },
+                                 {
+                                     "code":  "9610",
+                                     "behavior":  "FEEDBACK_READ_HISTORY: blok baca history",
+                                     "evidence":  "Form1.SetText IL_06B4-\u003eIL_0E4E"
+                                 },
+                                 {
+                                     "code":  "9620",
+                                     "behavior":  "SEND_AFR_STD: blok AFR standar",
+                                     "evidence":  "Form1.SetText IL_06C5-\u003eIL_10C2"
+                                 },
+                                 {
+                                     "code":  "9614",
+                                     "behavior":  "FEEDBACK_READ_PATTERN: blok baca pattern",
+                                     "evidence":  "Form1.SetText IL_06D6-\u003eIL_1253"
+                                 },
+                                 {
+                                     "code":  "1A00",
+                                     "behavior":  "ACK: mesin state lanjutan (kirim baris map remote 8601/8602/8603/8605, langkah save, 360C, refresh 4605, dst.)",
+                                     "evidence":  "Form1.SetText IL_06E7-\u003eIL_140A.."
+                                 },
+                                 {
+                                     "code":  "A602",
+                                     "behavior":  "FEEDBACK_READ_DIAG2: decode bit status (00=OK,01=ERROR,10=NA,11=RESERVED,E.OFF)",
+                                     "evidence":  "Form1.SetText IL_06F8-\u003eIL_3DAA.."
+                                 },
+                                 {
+                                     "code":  "A601",
+                                     "behavior":  "FEEDBACK_READ_TPS_CAL: parse tegangan kalibrasi TPS (tampil \"x.xx V\")",
+                                     "evidence":  "Form1.SetText IL_0709-\u003eIL_4268.."
+                                 },
+                                 {
+                                     "code":  "B800",
+                                     "behavior":  "MAINTAIN_REPORT: counter runtime maintenance (format 3600/60 detik)",
+                                     "evidence":  "Form1.SetText IL_071A-\u003eIL_43B6.."
+                                 },
+                                 {
+                                     "code":  "7602",
+                                     "behavior":  "balasan langkah remote-map: kirim 6601/6602",
+                                     "evidence":  "Form1.SetText IL_072B-\u003eIL_44B7.."
+                                 },
+                                 {
+                                     "code":  "7601",
+                                     "behavior":  "balasan langkah remote-map: kirim 6601/6603",
+                                     "evidence":  "Form1.SetText IL_073C-\u003eIL_46F3.."
+                                 },
+                                 {
+                                     "code":  "7603",
+                                     "behavior":  "balasan langkah remote-map: kirim 6603/6605",
+                                     "evidence":  "Form1.SetText IL_074D-\u003eIL_494E.."
+                                 },
+                                 {
+                                     "code":  "7605",
+                                     "behavior":  "balasan langkah remote-map: kirim 6605",
+                                     "evidence":  "Form1.SetText IL_075E-\u003eIL_4B88.."
+                                 },
+                                 {
+                                     "code":  "(default)",
+                                     "behavior":  "token tidak dikenal -\u003e abaikan (ret)",
+                                     "evidence":  "Form1.SetText IL_057A/IL_066F..IL_076E (ret)"
+                                 }
+                             ],
+    "literal_frames":  [
+                           {
+                               "frame":  "1B00\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "ECHO_ACK / keepalive ping (ulang_echo tiap 3000 ms; handshake awal)",
+                               "evidence":  "Form1.lanjut_echo IL_0033, ulang_echo_Tick IL_0001, SerialHandler_NewConnection IL_0060"
+                           },
+                           {
+                               "frame":  "160A\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "ENTER_LIVE (timer_live_enter tiap 500 ms, maks 25x)",
+                               "evidence":  "Form1.timer_live_enter_Tick IL_0028, SerialHandler_NewConnection IL_013F"
+                           },
+                           {
+                               "frame":  "160B\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "EXIT_LIVE",
+                               "evidence":  "Form1.timer_live_enter_Tick IL_0078"
+                           },
+                           {
+                               "frame":  "1617\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "PC_READ_USER_DEF_2 (pra-syarat live, balasan 9616)",
+                               "evidence":  "Form1.SerialHandler_NewConnection IL_0129"
+                           },
+                           {
+                               "frame":  "4605\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_ENGINE_STOP dipakai sebagai request STATUS (SendStatus; balasan frame A603)",
+                               "evidence":  "Form1.SendStatus IL_001F, SetText IL_01D5/IL_0252"
+                           },
+                           {
+                               "frame":  "1632\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "RESET_LOGGER (eraser data logger)",
+                               "evidence":  "Form1.ProcessSerialData IL_0077"
+                           },
+                           {
+                               "frame":  "150d;0\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "perintah switch baud -\u003e57600",
+                               "evidence":  "Form1.SwitchBaudrate IL_0007 (String.Format \"150d;{0}\")"
+                           },
+                           {
+                               "frame":  "150d;1\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "perintah switch baud -\u003e 460800 (mode logger)",
+                               "evidence":  "Form1.SwitchBaudrate IL_0007"
+                           },
+                           {
+                               "frame":  "#;8080;\u003cSSID\u003e;\u003cPASSWORD\u003e;\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "provisioning WiFi ECU (SSID \u003c=31, password8..63)",
+                               "evidence":  "Form1.ChangeSSIDMain IL_0012-IL_0038"
+                           },
+                           {
+                               "frame":  "1601;\u003ccore\u003e;\u003cidx\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_FUEL_BASE per baris (idx 0..20)",
+                               "evidence":  "JukenCommProtocol.GetMapPrepare_IL"
+                           },
+                           {
+                               "frame":  "1602;\u003ccore\u003e;\u003cidx\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_FUEL_COR1 per baris",
+                               "evidence":  "JukenCommProtocol.GetMapPrepare IL_000A-IL_0033"
+                           },
+                           {
+                               "frame":  "1603;\u003ccore\u003e;\u003cidx\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_FUEL_INJT per baris",
+                               "evidence":  "JukenCommProtocol.GetMapPrepare_Get IL_003D-IL_0066"
+                           },
+                           {
+                               "frame":  "1605;\u003ccore\u003e;\u003cidx\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_IGN_ANGLE per baris",
+                               "evidence":  "JukenCommProtocol.GetMapPrepare IL_00A4-IL_00D1"
+                           },
+                           {
+                               "frame":  "1610;\u003cidx\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_HISTORY per index (0..20)",
+                               "evidence":  "JukenCommProtocol.GetMapPrepare IL_00DC-IL_0107"
+                           },
+                           {
+                               "frame":  "1614;\u003ccore\u003e;\u003cidx\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "READ_PATTERN (idx 1..19)",
+                               "evidence":  "JukenCommProtocol.GetPatternPrepare IL_000A-IL_0041"
+                           },
+                           {
+                               "frame":  "2602;\u003ccore\u003e;\u003ctpsIdx\u003e;\u003cv0\u003e;...;\u003cv60\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "SAVE_FUEL_COR1 satu baris (61 nilai RPM) - loop telemetri/auto-tune",
+                               "evidence":  "Form1.SetTextTelemetri IL_0177-IL_0220"
+                           },
+                           {
+                               "frame":  "9500;\u003ccalCRC_hex\u003e;\u003cmapCRC_hex\u003e",
+                               "dir":  "RX",
+                               "purpose":  "FeedBack_CRC:3 token, CRC di-parse base16 (Convert.ToUInt32(x,16))",
+                               "evidence":  "Form1.SetText IL_00C2-IL_0107"
+                           },
+                           {
+                               "frame":  "A603;\u003cTPS\u003e;\u003cBAT\u003e;\u003cCORE\u003e;\u003cRPM\u003e;\u003cEOTx10\u003e;\u003cAFR\u003e;\u003cMAPx10\u003e;\u003cIATx10\u003e;\u003cPUMPx1000\u003e;\u003cINJx1000\u003e",
+                               "dir":  "RX",
+                               "purpose":  "frame telemetri/status live",
+                               "evidence":  "Form1.SetText IL_0854-IL_0DDF (indeks newData[1..10])"
+                           },
+                           {
+                               "frame":  "8601;... / 8602;... / 8603;... / 8605;...",
+                               "dir":  "TX",
+                               "purpose":  "remote-map row write (payload baris + 61/61/21/31 nilai)",
+                               "evidence":  "Form1.SetText IL_167F/IL_18FD/IL_1CC4/IL_2073.."
+                           },
+                           {
+                               "frame":  "6601;... / 6602;... / 6603;... / 6605;...",
+                               "dir":  "TX",
+                               "purpose":  "perintah progres remote setelah balasan 7601..7605",
+                               "evidence":  "Form1.SetText IL_45F1..IL_4DCA"
+                           },
+                           {
+                               "frame":  "360C;\u003ca\u003e;\u003cb\u003e;\u003cc\u003e\\r\\n",
+                               "dir":  "TX",
+                               "purpose":  "SAVE_TPS_RATE dengan3 nilai teks",
+                               "evidence":  "Form1.SetText IL_3BDE-IL_3C26"
+                           }
+                       ],
+    "bulk":  {
+                 "begin_markers":  {
+                                       "cal":  "#B1#",
+                                       "map":  "#B2#",
+                                       "log":  "#B3#"
+                                   },
+                 "end_marker_raw":  "*eE*\\r\\n",
+                 "end_marker_trimmed":  "*eE*",
+                 "end_marker_bytes":  [
+                                          42,
+                                          101,
+                                          69,
+                                          42,
+                                          13,
+                                          10
+                                      ],
+                 "marker_evidence":  "Juken_5.Protocol.CommandList..cctor IL_0000-IL_0028 (ldstr)",
+                 "flow":  "RX bulk: akumulasi byte -\u003e cari begin marker -\u003e ambil tepat SizeOf(struktur) byte -\u003e Parse struct -\u003e (log: hitung CRC_LOG) -\u003e akhiri saat end marker; ukuran dicek dengan GetCalSize/GetMapSize/GetLogSize",
+                 "flow_evidence":  "CommManagement.ProcessBulkReceiveMessage IL_01F9-IL_03C4, Form1.CompleteSerialClientHandler_NewDataReceived (mode BulkReceive)",
+                 "size_checks":  {
+                                     "cal":  "GetCalSize() = Marshal.SizeOf(cal_t) = 1012",
+                                     "map":  "GetMapSize() = Marshal.SizeOf(coreJ6_t) = 10248",
+                                     "log":  "GetLogSize() = Marshal.SizeOf(log_t) = 28"
+                                 }
+             },
+    "crc":  {
+                "algorithm":  "STM32 hardware CRC (non-reflected, MSB-first)",
+                "init":  "0xFFFFFFFF",
+                "polynomial":  "0x04C11DB7 (79764919 decimal)",
+                "word_size_bits":  32,
+                "byte_order":  "input dibaca sebagai kata uint32 little-endian (Buffer.BlockCopy)",
+                "final_xor":  "tidak ada",
+                "pseudo_c":  "uint32_t stm32_crc(const uint8_t *data, size_t len) {\n    uint32_t crc = 0xFFFFFFFFu;\n    size_t nwords = (len + 3) / 4;            // padding ke kelipatan 4\n    for (size_t i = 0; i \u003c nwords; i++) {\n        uint32_t w; memcpy(\u0026w, data + i*4, 4); // little-endian\n        crc ^= w;\n        for (int b = 0; b \u003c 32; b++) {\n            crc = (crc \u0026 0x80000000u) ? ((crc \u003c\u003c 1) ^ 0x04C11DB7u) : (crc \u003c\u003c 1);\n        }\n    }\n    return crc;\n}",
+                "usage":  [
+                              "CRC_CAL = f(bytes cal_t) dibandingkan dengan bagian cal dari balasan 9500",
+                              "CRC_MAP = f(bytes coreJ6_t) dibandingkan dengan bagian map dari balasan 9500",
+                              "CRC_LOG = f(bytes antara #B3# dan *eE*) disimpan saat bulk log"
+                          ],
+                "evidence":  "JukenDataManagement.ComputeSTM32Checksum(UInt32[]) IL_0000-IL_0041; ComputeSTM32Checksum(Byte[]) IL_0000-IL_008D; isGetMapValid IL_0000-IL_008D (ldc.i4 79764919, ldc.i4.m1)"
+            },
+    "telemetry_A603":  {
+                           "header":  "A603",
+                           "header_enum":  "FEEDBACK_READ_ENGINE_RUN / SEND_ENGINE_RUN (0xA603 = 42499)",
+                           "split":  "token[0]=\u0027A603\u0027, pemisah \u0027;\u0027, nilai memakai InvariantCulture (pemisah desimal \u0027.\u0027)",
+                           "fields":  [
+                                          {
+                                              "index":  0,
+                                              "key":  "header",
+                                              "type":  "string",
+                                              "value":  "A603"
+                                          },
+                                          {
+                                              "index":  1,
+                                              "key":  "tps_percent",
+                                              "type":  "float",
+                                              "note":  "binning posisi_tps: 1..2 -\u003erow1, 3..94 -\u003erumus floor((floor(tps*2/10)*10*2/10...)/5, \u003e=95 -\u003erow20; Convert.ToInt32 -\u003e angka_needle_tps"
+                                          },
+                                          {
+                                              "index":  2,
+                                              "key":  "battery_volt",
+                                              "type":  "float",
+                                              "note":  "tampil apa adanya; LED level = round(v)-9 (nilai_batery); angka_bat string utk label"
+                                          },
+                                          {
+                                              "index":  3,
+                                              "key":  "core_id",
+                                              "type":  "int",
+                                              "note":  "dibandingkan dgn mapping_live saat masuk live; beda -\u003e \"Different Core\""
+                                          },
+                                          {
+                                              "index":  4,
+                                              "key":  "rpm",
+                                              "type":  "float",
+                                              "note":  "clamp 1000..16000 utk bin kolom: posisi_rpm=(q-1000)/250 dgn q=round(rpm*4/1000)*1000/4; posisi_rpm_ig=(q-1000)/500; juga -\u003e cek_rpm (int)"
+                                          },
+                                          {
+                                              "index":  5,
+                                              "key":  "eot_raw",
+                                              "type":  "float",
+                                              "note":  "EOT_C = raw/10"
+                                          },
+                                          {
+                                              "index":  6,
+                                              "key":  "afr",
+                                              "type":  "float/string",
+                                              "note":  "angka_afr=token mentah; band nilai_afr=(int)raw-9: \u003c=2 biru, 3 hijau, 4 kuning, \u003e4 merah"
+                                          },
+                                          {
+                                              "index":  7,
+                                              "key":  "map_raw",
+                                              "type":  "float",
+                                              "note":  "MAP = raw/10 (juga map_2d = raw/10); token dibersihkan dgn Replace(\"A603\",\"\")"
+                                          },
+                                          {
+                                              "index":  8,
+                                              "key":  "iat_raw",
+                                              "type":  "float",
+                                              "note":  "IAT = raw/10; token dibersihkan dgn Replace(\"A603\",\"\")"
+                                          },
+                                          {
+                                              "index":  9,
+                                              "key":  "pump_raw",
+                                              "type":  "float",
+                                              "note":  "IPump_A = raw/1000"
+                                          },
+                                          {
+                                              "index":  10,
+                                              "key":  "inj_raw",
+                                              "type":  "float",
+                                              "note":  "IInj_A = raw/1000"
+                                          }
+                                      ],
+                           "variants":  "Jalur assigndataStatus (panel depan) memakai subset index 1,2,4,5,8 dengan skala sama",
+                           "evidence":  "Form1.SetText IL_0854-IL_0DDF (assigndataStatus), IL_098E-IL_0DDF (masuk_live), Form1.jalan_live IL_013C-IL_0BDE (render), Form1.SetTextTelemetri IL_005D-IL_0076 (cek header A603/1A00)"
+                       },
+    "structs":  {
+                    "points_constants":  {
+                                             "VBAT_POINTS":  16,
+                                             "TEMP_POINTS":  16,
+                                             "FUEL_POINTS":  61,
+                                             "ECU_PARAMS_POINTS":  128,
+                                             "BIKE_FEATURE_POINTS":  29,
+                                             "APP_SETTING_POINTS":  32,
+                                             "CHAR_POINTS":  21,
+                                             "TPS_POINTS":  21
+                                         },
+                    "note":  "Semua struct StructLayout sequential + MarshalAs (U1/I2/U2/ByValArray), serialisasi Marshal.StructureToPtr/PtrToStructure -\u003e little-endian, tanpa packing khusus (pack default)",
+                    "log_t":  {
+                                  "size":  28,
+                                  "fields":  [
+                                                 {
+                                                     "name":  "Tps_Idx",
+                                                     "offset":  0,
+                                                     "type":  "Byte"
+                                                 },
+                                                 {
+                                                     "name":  "RpmIdx",
+                                                     "offset":  1,
+                                                     "type":  "Byte"
+                                                 },
+                                                 {
+                                                     "name":  "Afr",
+                                                     "offset":  2,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "ETemp",
+                                                     "offset":  4,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "ATemp",
+                                                     "offset":  6,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "Map",
+                                                     "offset":  8,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "VBat",
+                                                     "offset":  10,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "ERpm",
+                                                     "offset":  12,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "TPS",
+                                                     "offset":  14,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "IPump",
+                                                     "offset":  16,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "IInj",
+                                                     "offset":  18,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "PW",
+                                                     "offset":  20,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "ATemp_Ex",
+                                                     "offset":  22,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "TimerSpeed",
+                                                     "offset":  24,
+                                                     "type":  "UInt16"
+                                                 },
+                                                 {
+                                                     "name":  "Speed",
+                                                     "offset":  26,
+                                                     "type":  "UInt16"
+                                                 }
+                                             ]
+                              },
+                    "engine_pt":  {
+                                      "size":  20,
+                                      "fields":  [
+                                                     {
+                                                         "name":  "TeethBase",
+                                                         "offset":  0,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "Teeth",
+                                                         "offset":  1,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "GapRatio",
+                                                         "offset":  2,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "Teeth_4C",
+                                                         "offset":  3,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "MissTooth1",
+                                                         "offset":  4,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "MissTooth2",
+                                                         "offset":  5,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "TEETHsync",
+                                                         "offset":  6,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "PeriodPoint",
+                                                         "offset":  7,
+                                                         "type":  "Byte"
+                                                     },
+                                                     {
+                                                         "name":  "Tdc",
+                                                         "offset":  8,
+                                                         "type":  "UInt16"
+                                                     },
+                                                     {
+                                                         "name":  "Spark1RefAngle",
+                                                         "offset":  10,
+                                                         "type":  "UInt16"
+                                                     },
+                                                     {
+                                                         "name":  "Fuel1RefAngle",
+                                                         "offset":  12,
+                                                         "type":  "UInt16"
+                                                     },
+                                                     {
+                                                         "name":  "Spark2RefAngle",
+                                                         "offset":  14,
+                                                         "type":  "UInt16"
+                                                     },
+                                                     {
+                                                         "name":  "Fuel2RefAngle",
+                                                         "offset":  16,
+                                                         "type":  "UInt16"
+                                                     },
+                                                     {
+                                                         "name":  "DeltaTps",
+                                                         "offset":  18,
+                                                         "type":  "UInt16"
+                                                     }
+                                                 ]
+                                  },
+                    "Bike_ft":  {
+                                    "size":  29,
+                                    "fields":  [
+                                                   {
+                                                       "name":  "Trans",
+                                                       "offset":  0,
+                                                       "type":  "gear_t"
+                                                   },
+                                                   {
+                                                       "name":  "Cylinder",
+                                                       "offset":  1,
+                                                       "type":  "cylinder_t"
+                                                   },
+                                                   {
+                                                       "name":  "OBD",
+                                                       "offset":  2,
+                                                       "type":  "obd_t"
+                                                   },
+                                                   {
+                                                       "name":  "TACHO",
+                                                       "offset":  3,
+                                                       "type":  "tacho_t"
+                                                   },
+                                                   {
+                                                       "name":  "FTSW",
+                                                       "offset":  4,
+                                                       "type":  "input_t"
+                                                   },
+                                                   {
+                                                       "name":  "CHOKE",
+                                                       "offset":  5,
+                                                       "type":  "choke_t"
+                                                   },
+                                                   {
+                                                       "name":  "MAP_TOOTH_START",
+                                                       "offset":  6,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "MAP_TOOTH_END",
+                                                       "offset":  7,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "MAP_DROPval",
+                                                       "offset":  8,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "MAP",
+                                                       "offset":  9,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "O2",
+                                                       "offset":  10,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "IAT",
+                                                       "offset":  11,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "MIL_Led",
+                                                       "offset":  12,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "T_IND_Led",
+                                                       "offset":  13,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "ECO_Led",
+                                                       "offset":  14,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "ISS",
+                                                       "offset":  15,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "ABS",
+                                                       "offset":  16,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "BANK_A",
+                                                       "offset":  17,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "ESTOP",
+                                                       "offset":  18,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "STSW",
+                                                       "offset":  19,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "NSW",
+                                                       "offset":  20,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "CLTSW",
+                                                       "offset":  21,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "FAN",
+                                                       "offset":  22,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "EX_IN",
+                                                       "offset":  23,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "VVA",
+                                                       "offset":  24,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "LAMP",
+                                                       "offset":  25,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "O2H",
+                                                       "offset":  26,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "SPEED",
+                                                       "offset":  27,
+                                                       "type":  "Byte"
+                                                   },
+                                                   {
+                                                       "name":  "CPS",
+                                                       "offset":  28,
+                                                       "type":  "Byte"
+                                                   }
+                                               ]
+                                },
+                    "appl_t":  {
+                                   "size":  64,
+                                   "fields":  [
+                                                  {
+                                                      "name":  "START_RPM",
+                                                      "offset":  0,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "STALL_RPM",
+                                                      "offset":  2,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "FUEL_PUMP_TOUT",
+                                                      "offset":  4,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "FUEL_ON_MAX",
+                                                      "offset":  6,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "SATURATION_Timeout",
+                                                      "offset":  8,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "CAL_FM_MACCEL",
+                                                      "offset":  10,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "CAL_FM_MDECEL",
+                                                      "offset":  12,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "MSTART_Decay",
+                                                      "offset":  14,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "MSTART_Decay_Timeout",
+                                                      "offset":  16,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TIP_IN_VALUE",
+                                                      "offset":  18,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TIP_IN_Decay",
+                                                      "offset":  20,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TIP_IN_Decay_Timeout",
+                                                      "offset":  22,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TIP_OUT_VALUE",
+                                                      "offset":  24,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TIP_OUT_Decay",
+                                                      "offset":  26,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TIP_OUT_Decay_Timeout",
+                                                      "offset":  28,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "FAN_TEMP_OFFSET",
+                                                      "offset":  30,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TEMP_WARNING",
+                                                      "offset":  32,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "WARNING_INIT_TOUT",
+                                                      "offset":  34,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ECO_INIT_TOUT",
+                                                      "offset":  36,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "MIN_SYNC_RATIO",
+                                                      "offset":  38,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "MAX_SYNC_RATIO",
+                                                      "offset":  40,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AFRtempCal",
+                                                      "offset":  42,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AFRmin",
+                                                      "offset":  44,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AFRmax",
+                                                      "offset":  46,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AFRminVal",
+                                                      "offset":  48,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "AFRmaxVal",
+                                                      "offset":  50,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "TempAdj",
+                                                      "offset":  52,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AppResv2",
+                                                      "offset":  54,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AppResv3",
+                                                      "offset":  56,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AppResv4",
+                                                      "offset":  58,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AppResv5",
+                                                      "offset":  60,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AppResv6",
+                                                      "offset":  62,
+                                                      "type":  "UInt16"
+                                                  }
+                                              ]
+                               },
+                    "ecu_pt":  {
+                                   "size":  256,
+                                   "fields":  [
+                                                  {
+                                                      "name":  "TpsLow",
+                                                      "offset":  0,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TpsHigh",
+                                                      "offset":  2,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RpmLimit",
+                                                      "offset":  4,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RpmVVA",
+                                                      "offset":  6,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Inj2_Enable",
+                                                      "offset":  8,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TpsIdx_Inj2",
+                                                      "offset":  10,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RpmInj2",
+                                                      "offset":  12,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TE_Enable",
+                                                      "offset":  14,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RpmStartTurbo",
+                                                      "offset":  16,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RpmStopTurbo",
+                                                      "offset":  18,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "FanTemp_Set",
+                                                      "offset":  20,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RpmIdle_Set",
+                                                      "offset":  22,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "DecTime",
+                                                      "offset":  24,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ISMpos_Set",
+                                                      "offset":  26,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Rpm_ShiftLight",
+                                                      "offset":  28,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AirTemp_Set",
+                                                      "offset":  30,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "FuelAir",
+                                                      "offset":  32,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "ShiftDelay",
+                                                      "offset":  34,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "WarmUp",
+                                                      "offset":  36,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "FuelStart",
+                                                      "offset":  38,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "BankA_Enable",
+                                                      "offset":  40,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Lo_Range",
+                                                      "offset":  42,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Mid_Range",
+                                                      "offset":  44,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Hi_Range",
+                                                      "offset":  46,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ST_TpxIdx",
+                                                      "offset":  48,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ST_RpmStart",
+                                                      "offset":  50,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ST_RpmStop",
+                                                      "offset":  52,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ST_Res",
+                                                      "offset":  54,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "JJS_TpsRange",
+                                                      "offset":  56,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "JJS_RpmRange",
+                                                      "offset":  58,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Retard_Temp",
+                                                      "offset":  60,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Retard_Angle",
+                                                      "offset":  62,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "AP_Enable",
+                                                      "offset":  64,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AP_Temp",
+                                                      "offset":  66,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "AP_Limit",
+                                                      "offset":  68,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "MapNo",
+                                                      "offset":  70,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "JF_Cal",
+                                                      "offset":  72,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "JF_Pos",
+                                                      "offset":  74,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "JF_Rate",
+                                                      "offset":  76,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "JF_PWidth",
+                                                      "offset":  78,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TCS_Status",
+                                                      "offset":  80,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "TCS_DiffSpd",
+                                                      "offset":  82,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve3",
+                                                      "offset":  84,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve4",
+                                                      "offset":  86,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve5",
+                                                      "offset":  88,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve6",
+                                                      "offset":  90,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve7",
+                                                      "offset":  92,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve8",
+                                                      "offset":  94,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "StartSA",
+                                                      "offset":  96,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ImobEn",
+                                                      "offset":  98,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "ImobLock",
+                                                      "offset":  100,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Dwell",
+                                                      "offset":  102,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Key1H",
+                                                      "offset":  104,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Key1L",
+                                                      "offset":  106,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Key2H",
+                                                      "offset":  108,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Key2L",
+                                                      "offset":  110,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Key3H",
+                                                      "offset":  112,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Key3L",
+                                                      "offset":  114,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "RUNtime",
+                                                      "offset":  116,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "VBATcal",
+                                                      "offset":  118,
+                                                      "type":  "Int16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve21",
+                                                      "offset":  120,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve22",
+                                                      "offset":  122,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve23",
+                                                      "offset":  124,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve24",
+                                                      "offset":  126,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve25",
+                                                      "offset":  128,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve26",
+                                                      "offset":  130,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve27",
+                                                      "offset":  132,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve28",
+                                                      "offset":  134,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve29",
+                                                      "offset":  136,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve30",
+                                                      "offset":  138,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve31",
+                                                      "offset":  140,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve32",
+                                                      "offset":  142,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve33",
+                                                      "offset":  144,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve34",
+                                                      "offset":  146,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve35",
+                                                      "offset":  148,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve36",
+                                                      "offset":  150,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve37",
+                                                      "offset":  152,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve38",
+                                                      "offset":  154,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve39",
+                                                      "offset":  156,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve40",
+                                                      "offset":  158,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve41",
+                                                      "offset":  160,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve42",
+                                                      "offset":  162,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve43",
+                                                      "offset":  164,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve44",
+                                                      "offset":  166,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve45",
+                                                      "offset":  168,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve46",
+                                                      "offset":  170,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve47",
+                                                      "offset":  172,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve48",
+                                                      "offset":  174,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve49",
+                                                      "offset":  176,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve50",
+                                                      "offset":  178,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve51",
+                                                      "offset":  180,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve52",
+                                                      "offset":  182,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve53",
+                                                      "offset":  184,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve54",
+                                                      "offset":  186,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve55",
+                                                      "offset":  188,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve56",
+                                                      "offset":  190,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve57",
+                                                      "offset":  192,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve58",
+                                                      "offset":  194,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve59",
+                                                      "offset":  196,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve60",
+                                                      "offset":  198,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve61",
+                                                      "offset":  200,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve62",
+                                                      "offset":  202,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve63",
+                                                      "offset":  204,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve64",
+                                                      "offset":  206,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve65",
+                                                      "offset":  208,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve66",
+                                                      "offset":  210,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve67",
+                                                      "offset":  212,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve68",
+                                                      "offset":  214,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve69",
+                                                      "offset":  216,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve70",
+                                                      "offset":  218,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve71",
+                                                      "offset":  220,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve72",
+                                                      "offset":  222,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve73",
+                                                      "offset":  224,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve74",
+                                                      "offset":  226,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve75",
+                                                      "offset":  228,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve76",
+                                                      "offset":  230,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve77",
+                                                      "offset":  232,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve78",
+                                                      "offset":  234,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve79",
+                                                      "offset":  236,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve80",
+                                                      "offset":  238,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve81",
+                                                      "offset":  240,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve82",
+                                                      "offset":  242,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve83",
+                                                      "offset":  244,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve84",
+                                                      "offset":  246,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve85",
+                                                      "offset":  248,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve86",
+                                                      "offset":  250,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve87",
+                                                      "offset":  252,
+                                                      "type":  "UInt16"
+                                                  },
+                                                  {
+                                                      "name":  "Reserve88",
+                                                      "offset":  254,
+                                                      "type":  "UInt16"
+                                                  }
+                                              ]
+                               },
+                    "cal_t":  {
+                                  "size":  1012,
+                                  "fields":  [
+                                                 {
+                                                     "name":  "EcuInitCode",
+                                                     "offset":  0,
+                                                     "type":  "UInt32"
+                                                 },
+                                                 {
+                                                     "name":  "FuelStart_added",
+                                                     "offset":  4,
+                                                     "type":  "UInt16[]",
+                                                     "count":  16,
+                                                     "bytes":  32
+                                                 },
+                                                 {
+                                                     "name":  "FuelWarmUp_added",
+                                                     "offset":  36,
+                                                     "type":  "Int16[]",
+                                                     "count":  16,
+                                                     "bytes":  32
+                                                 },
+                                                 {
+                                                     "name":  "SparkWarmUp_added",
+                                                     "offset":  68,
+                                                     "type":  "Int16[]",
+                                                     "count":  16,
+                                                     "bytes":  32
+                                                 },
+                                                 {
+                                                     "name":  "StepPos",
+                                                     "offset":  100,
+                                                     "type":  "Int16[]",
+                                                     "count":  16,
+                                                     "bytes":  32
+                                                 },
+                                                 {
+                                                     "name":  "ChokeDelay",
+                                                     "offset":  132,
+                                                     "type":  "UInt16[]",
+                                                     "count":  16,
+                                                     "bytes":  32
+                                                 },
+                                                 {
+                                                     "name":  "FuelBat_added",
+                                                     "offset":  164,
+                                                     "type":  "Byte[]",
+                                                     "count":  16,
+                                                     "bytes":  16
+                                                 },
+                                                 {
+                                                     "name":  "DwellCal",
+                                                     "offset":  180,
+                                                     "type":  "Int16[]",
+                                                     "count":  16,
+                                                     "bytes":  32
+                                                 },
+                                                 {
+                                                     "name":  "Dwell",
+                                                     "offset":  212,
+                                                     "type":  "UInt16[]",
+                                                     "count":  61,
+                                                     "bytes":  122
+                                                 },
+                                                 {
+                                                     "name":  "Cor1Table",
+                                                     "offset":  334,
+                                                     "type":  "Int16[]",
+                                                     "count":  61,
+                                                     "bytes":  122
+                                                 },
+                                                 {
+                                                     "name":  "Cor2Table",
+                                                     "offset":  456,
+                                                     "type":  "Int16[]",
+                                                     "count":  61,
+                                                     "bytes":  122
+                                                 },
+                                                 {
+                                                     "name":  "Ecu",
+                                                     "offset":  578,
+                                                     "type":  "ecu_pt"
+                                                 },
+                                                 {
+                                                     "name":  "pad",
+                                                     "offset":  834,
+                                                     "type":  "Byte"
+                                                 },
+                                                 {
+                                                     "name":  "EcuName",
+                                                     "offset":  835,
+                                                     "type":  "Byte[]",
+                                                     "count":  21,
+                                                     "bytes":  21
+                                                 },
+                                                 {
+                                                     "name":  "EcuType",
+                                                     "offset":  856,
+                                                     "type":  "Byte[]",
+                                                     "count":  21,
+                                                     "bytes":  21
+                                                 },
+                                                 {
+                                                     "name":  "SoftVer",
+                                                     "offset":  877,
+                                                     "type":  "Byte[]",
+                                                     "count":  21,
+                                                     "bytes":  21
+                                                 },
+                                                 {
+                                                     "name":  "App",
+                                                     "offset":  898,
+                                                     "type":  "appl_t"
+                                                 },
+                                                 {
+                                                     "name":  "BikeF",
+                                                     "offset":  962,
+                                                     "type":  "Bike_ft"
+                                                 },
+                                                 {
+                                                     "name":  "tcs",
+                                                     "offset":  991,
+                                                     "type":  "Byte"
+                                                 },
+                                                 {
+                                                     "name":  "EngineS",
+                                                     "offset":  992,
+                                                     "type":  "engine_pt"
+                                                 }
+                                             ]
+                              },
+                    "coreJ6_t":  {
+                                     "size":  10248,
+                                     "fields":  [
+                                                    {
+                                                        "name":  "FuelBase",
+                                                        "offset":  0,
+                                                        "type":  "Int16[]",
+                                                        "count":  1281,
+                                                        "bytes":  2562
+                                                    },
+                                                    {
+                                                        "name":  "InjTmg",
+                                                        "offset":  2562,
+                                                        "type":  "UInt16[]",
+                                                        "count":  1281,
+                                                        "bytes":  2562
+                                                    },
+                                                    {
+                                                        "name":  "IgnTmg",
+                                                        "offset":  5124,
+                                                        "type":  "UInt16[]",
+                                                        "count":  1281,
+                                                        "bytes":  2562
+                                                    },
+                                                    {
+                                                        "name":  "FuelCor1",
+                                                        "offset":  7686,
+                                                        "type":  "SByte[]",
+                                                        "count":  1281,
+                                                        "bytes":  1281
+                                                    },
+                                                    {
+                                                        "name":  "FuelCorTB1",
+                                                        "offset":  8967,
+                                                        "type":  "SByte[]",
+                                                        "count":  1281,
+                                                        "bytes":  1281
+                                                    }
+                                                ]
+                                 }
+                },
+    "struct_semantics":  {
+                             "coreJ6_t":  "peta (map): FuelBase int16[1281], InjTmg uint16[1281], IgnTmg uint16[1281], FuelCor1 int8[1281], FuelCorTB1 int8[1281]; 1281 = 21 baris TPS x 61 kolom RPM; indeks = tpsIdx*61 + rpmIdx (inferensi kuat: UI memakai posisi_tps 0..20 dan posisi_rpm 0..60)",
+                             "cal_t":  "parameter kalibrasi: tabel16/61 titik + blok ecu_pt(256) + identitas EcuName[21]/EcuType[21]/SoftVer[21] + appl_t + Bike_ft + engine_pt; CRC_CAL dihitung atas seluruh struct",
+                             "log_t":  "satu sampel data logger (28 byte): indeks titik TPS/RPM +13 pengukuran uint16",
+                             "identity":  "EcuName/EcuType/SoftVer berada di cal_t offset835/856/877 (21 byte each) - didapat via bulk #B1#"
+                         },
+    "command_to_expected_reply_note":  "Sumber: JukenCommProtocol.CreateDictionary IL_0006-IL_00D6 (13 pasang)",
+    "timing":  [
+                   {
+                       "name":  "ulang_echo (keepalive)",
+                       "interval_ms":  3000,
+                       "action":  "kirim 1B00"
+                   },
+                   {
+                       "name":  "echo (watchdog)",
+                       "interval_ms":  1700,
+                       "action":  "time_echo++; jika \u003e10 dan bukan live -\u003e \"Not Connected\" + diskonek"
+                   },
+                   {
+                       "name":  "timer_live_enter",
+                       "interval_ms":  500,
+                       "action":  "kirim 160A berulang (maks 25x) sampai A603 core cocok"
+                   },
+                   {
+                       "name":  "live_counter (render gauge)",
+                       "interval_ms":  10,
+                       "action":  "jalan_live() update gauge/chart"
+                   },
+                   {
+                       "name":  "timer_live",
+                       "interval_ms":  1000,
+                       "action":  "reset hitung_live, stop diri"
+                   },
+                   {
+                       "name":  "SendStatus",
+                       "interval_ms":  -1,
+                       "action":  "kirim 4605 lalu Sleep(500)"
+                   },
+                   {
+                       "name":  "BulkCommandProcess",
+                       "interval_ms":  -1,
+                       "action":  "Delay(100) awal; poll balasan tiap10 ms (budget ~100 poll ~=1 dtk); retry \u003c=10x; antar kirim Delay(100 ms start, timerDelayBetweenSend 1 ms)"
+                   },
+                   {
+                       "name":  "commTimeout / reconnectTimeOut",
+                       "interval_ms":  10000,
+                       "action":  "timer 10 dtk; reconnect timeout15 dtk"
+                   },
+                   {
+                       "name":  "WriteCommand_",
+                       "interval_ms":  1500,
+                       "action":  "Sleep sebelum tulis (pemakaian khusus)"
+                   },
+                   {
+                       "name":  "handshake ping retry",
+                       "interval_ms":  -1,
+                       "action":  "1B00 tiap 100 ms (USB, maks5x) / 500 ms (WiFi, maks7x)"
+                   },
+                   {
+                       "name":  "SwitchBaudrate",
+                       "interval_ms":  200,
+                       "action":  "Sleep setelah 150d sebelum buka port baru"
+                   },
+                   {
+                       "name":  "WriteTimeout serial default",
+                       "interval_ms":  100,
+                       "action":  "naik ke10000 ms saat AddCommMessageByte"
+                   }
+               ],
+    "timing_evidence":  "Form1/ReliableSerialPort/CommManagement InitializeComponent \u0026 .ctor \u0026 handler IL (lihat spec md)",
+    "transports":  {
+                       "serial":  {
+                                      "implementation":  "Juken_5.Serial.ReliableSerialPort (subclass System.IO.Ports.SerialPort) -\u003e Juken_5.SerialCommHandler (ICommHandler)",
+                                      "framing":  "sama: line ASCII, RX split LF (ExtractDataToArray, byte 0x0A, potongan \u003e2 byte)",
+                                      "params":  {
+                                                     "parity":  "None(0)",
+                                                     "data_bits":  8,
+                                                     "stop_bits":  "One(1)",
+                                                     "handshake":  "None(0)",
+                                                     "dtr":  "enabled",
+                                                     "write_timeout_ms":  100,
+                                                     "received_threshold":  1024,
+                                                     "read_buffer":  4096,
+                                                     "continuous_read":  true
+                                                 },
+                                      "baud":  {
+                                                   "default":  "57600 (inferensi: updater auto-detect mencoba57600 lebih dulu; SwitchBaudrate mode0=57600)",
+                                                   "logger_mode":  "460800 via 150d;1",
+                                                   "menu":  "setBaudRateToolStripMenuItem (user, disimpan via InputBox)"
+                                               },
+                                      "autodetect":  "WMI Win32_PnPEntity Description = \"Prolific USB-to-Serial Comm Port\" atau \"USB-SERIAL CH340\" -\u003e ambil (COMn) dari Caption (Form1_Shown IL_0011-IL_007B)",
+                                      "evidence":  "ReliableSerialPort..ctor IL_0001-IL_0057, ContinuousRead IL_0000-IL_0049; Form1_Shown IL_000C-IL_00AC"
+                                  },
+                       "wifi":  {
+                                    "implementation":  "SimpleWifi (join AP ECU) + Juken_5.WifiCommHandler (TcpClient)",
+                                    "endpoint_default":  "192.168.2.6:80 (default di WifiCommHandler..ctor; dipakai Connect_Wifi.OnConnectedComplete -\u003e Form1.Connect_Handler(\"192.168.2.6\",80,true))",
+                                    "handshake_probe":  "setelah GetStream(): Stream.WriteByte(0x00)",
+                                    "receive":  "Socket.BeginReceive buffer4095 byte, async callback -\u003e DataReceived; BufferSize=4095",
+                                    "timeouts":  "commTimeout 10000 ms; reconnectTimeOut15 dtk",
+                                    "provisioning":  "#;8080;\u003cSSID\u003e;\u003cPASS\u003e;\\r\\n (Form1.ChangeSSIDMain); form ChangeSSID validasi SSID\u003c=31, PASS8..63",
+                                    "evidence":  "WifiCommHandler..ctor/Open/BeginReading/ReadCallback IL; Connect_Wifi.OnConnectedComplete IL_0029-IL_0031; ChangeSSID..button3_Click IL_0045-IL_0069"
+                                },
+                       "bluetooth":  {
+                                         "in_main_app":  "TIDAK ADA. Juken_5.exe tidak mereferensikan InTheHand; enum ConnectionType = {WIFI, SERIALCOM}; scan string \"bluetooth\" =0 match",
+                                         "in_updater":  "ApplicationUpdater.exe memakai InTheHand.Net.Personal v3.605.0: BluetoothComPortFinder (SetupDi + registry BTHPORT), SerialCommunication.GetBluetoothPort (WMI ClassGuid {4d36e978-e325-11ce-bfc1-08002be10318}), connect() menandai \"(BT)\" lalu membuka SerialPort biasa (SPP virtual COM)",
+                                         "discovery":  "SerialCommunication.scan(): BluetoothRadio.PrimaryRadio.Mode=1; BluetoothClient.DiscoverDevicesInRange()/DiscoverDevices()",
+                                         "custom_uuid":  "SerialCommunication.mUUID =2DA0CC0E-1927-4CE8-A6BF-1B7DAF4BB9D4 (dipakai BluetoothUtils membuat BluetoothEndPoint; tidak terlihat memanggil Connect di jalur normal)",
+                                         "conclusion":  "Bluetooth ECU = modul SPP klasik yang muncul sebagai COM port; protokol di atas BT = protokol serial yang sama. Di mobile: BluetoothSocket RFCOMM (UUID SPP standar00001101-0000-1000-8000-00805F9B34FB; fallback UUID custom di atas)",
+                                         "evidence":  "ApplicationUpdater: SerialCommunication.scan/BluetoothUtils/connect/FindSerialPort; BluetoothComPortFinder.FindAll IL_0000-IL_026C"
+                                     }
+                   },
+    "ecu_identity":  {
+                         "model_enum":  "ChargerModelComm: JUKEN5=0, JUKEN5_PLUS=1, JUKEN6=2 (ada form Form_Juken6)",
+                         "identity_fields":  "cal_t: EcuName[21]@835, EcuType[21]@856, SoftVer[21]@877 (via bulk #B1# / REQ_PARAM)",
+                         "read_model_cmd":  "READ_ECU_MODEL =0x1616 (balasan 0x9616)",
+                         "wifi_ssid":  "tidak di-hardcode; bisa diubah via form ChangeSSID (#;8080;...)",
+                         "app_version":  "Juken_51.0.18.18; PDB: C:\\Desando\\Juken 5+ 1.0.13\\JUKEN5_Get_Map_New\\Juken 5 PC\\Juken_5\\Juken_5\\obj\\Debug\\Juken_5.pdb"
+                     },
+    "open_items":  [
+                       "Sumber kode app remote: keluarga frame8601/8602/8603/8605 dan6601..6605 (fitur Send_Map_Remote) - payload row terpetakan sebagian, protokol servernya tidak ada di binary ini",
+                       "Bukti penggunaan keluarga7601..7605 (balasan remote) - asal kode dari ECU vs server tidak dipastikan",
+                       "Nilai default Form1._Baudrate tidak terlihat di-init di code path yang diekstrak; app menyediakan menu Set Baud Rate",
+                       "A603 apakah streaming periodik setelah160A atau murni balasan4605 - keduanya mungkin; perlu capture live asli",
+                       "Aturan korelasi balasan di luar13 pasang CommandValuePairs (mis.9618, A603) - diperlukan capture untuk memastikan",
+                       "Modul BT ECU memakai SPP standar vs UUID custom2DA0CC0E-... - perlu uji koneksi dari HP"
+                   ]
+}

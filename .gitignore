@@ -1,0 +1,26 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+.cxx/
+captures/
+
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.hprof
+.DS_Store
+
+# OS
+Thumbs.db
+
+# iOS / SwiftPM / xtool
+ios/.build/
+ios/xtool/
+ios/.bsp/
+ios/.swiftpm/
+
+# ESP (nanti)
+sdkconfig.old
+managed_components/

@@ -1,0 +1,5 @@
+# Konfigurasi xtool — https://github.com/xtool-org/xtool (lihat ios/README.md)
+version: 1
+bundleID: id.arvoid.artunningmonitor
+# Key merge Info.plist (xtool membuat Info.plist bawaan lalu menggabung file ini)
+infoPath: Info.plist

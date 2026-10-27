@@ -1,0 +1,12 @@
+<resources>
+    <!--
+      Theme Android-nya minimal (Compose yang menyediakan warna):
+      dipakai hanya untuk window background & system bars sebelum Compose siap.
+      Warna NomadKit (docs/design/nomadkit.md) diterapkan di ui/theme/Kotlin.
+    -->
+    <style name="Theme.ArTunning" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">#FFFDF7</item>
+        <item name="android:statusBarColor">#FFFDF7</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+</resources>

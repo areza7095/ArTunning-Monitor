@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">ArTunning Monitor</string>
+
+    <string name="tab_connect">Connect</string>
+    <string name="tab_live">Live</string>
+    <string name="tab_console">Console</string>
+
+    <string name="btn_scan">Scan</string>
+    <string name="btn_refresh">Refresh</string>
+    <string name="btn_connect">Connect</string>
+    <string name="btn_disconnect">Disconnect</string>
+    <string name="btn_start_live">Start Live</string>
+    <string name="btn_stop_live">Stop Live</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_clear">Clear</string>
+
+    <string name="hint_device_address">Alamat MAC, mis. AA:BB:CC:DD:EE:FF</string>
+    <string name="hint_raw_frame">contoh: 1B00</string>
+    <string name="empty_device_list">Tidak ada perangkat. Tekan Scan atau pair ECU di Pengaturan Android.</string>
+    <string name="waiting_stream">Menunggu data dari ECU…</string>
+    <string name="live_off">Live belum aktif — tekan Start Live</string>
+
+    <string name="cd_connect">Masuk ke perangkat</string>
+    <string name="cd_scan">Pindai perangkat Bluetooth</string>
+    <string name="cd_status">Status koneksi</string>
+    <string name="cd_send">Kirim frame</string>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+      File MERGE untuk xtool (xtool.yml -> infoPath): hanya key yang mau
+      ditambahkan/di-override di atas Info.plist bawaan xtool.
+      (xtool membuat Info.plist bawaan; default orientasi = portrait.)
+    -->
+    <key>CFBundleDisplayName</key>
+    <string>ArTunning Monitor</string>
+
+    <!-- iOS14+: wajib untuk koneksi TCP lokal ke ECU (192.168.2.6) -->
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Aplikasi perlu akses jaringan lokal untuk tersambung ke ECU Juken melalui WiFi.</string>
+</dict>
+</plist>

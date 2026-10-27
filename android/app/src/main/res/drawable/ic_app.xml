@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ikon app sederhana: cincin gauge (Peringatan: mengikuti palet NomadKit) -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Background bulat -->
+    <path
+        android:fillColor="#FFFDF7"
+        android:pathData="M54,54m-50,0a50,50,0 1,1 100,0a50,50,0 1,1 -100,0" />
+    <!-- Cincin gauge (Sand) -->
+    <path
+        android:fillColor="#D4A373"
+        android:pathData="M54,54m-38,0a38,38,0 1,1 76,0a38,38,0 1,1 -76,0 M54,54m-30,0a30,30,0 1,0 60,0a30,30,0 1,0 -60,0"
+        android:fillType="evenOdd" />
+    <!-- Jarum (Ocean) -->
+    <path
+        android:fillColor="#0891B2"
+        android:pathData="M54,50 L74,38 L57,57 Z" />
+    <!-- Titik as (Forest) -->
+    <path
+        android:fillColor="#166534"
+        android:pathData="M54,54m-6,0a6,6,0 1,1 12,0a6,6,0 1,1 -12,0" />
+</vector>
