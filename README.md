@@ -44,6 +44,7 @@ Aplikasi monitoring live yang ringan untuk ECU **Bintang Racing Team Juken 5 Plu
 docs/                          # SOURCE OF TRUTH bersama antar target
 ├─ juken5-protocol-spec.md     # spesifikasi protokol ECU (bukti IL disertakan)
 ├─ opcodes.json                #151 opcode, layout struct, timing, transport
+├─ install.md                  # build & install Windows -> Android / iPhone
 └─ design/nomadkit.md          # design system NomadKit (DESIGN.md, MIT)
 
 android/                       # Kotlin + Jetpack Compose (Bluetooth SPP)
@@ -65,34 +66,45 @@ esp/                           # (menyusul) target ESP
 2. Target baru = subfolder baru dengan build sendiri; jangan saling copy kode.
 3. Transport terpisah dari protokol (tambah WiFi/transport lain tanpa ubah protokol).
 
-## Quick start — Android
+## Install
+
+Detail lengkap (prasyarat + troubleshooting) ada di [`docs/install.md`](docs/install.md).
+
+### Windows — build + install ke Android
 
 ```powershell
 cd android
-.\gradlew.bat :core:protocol:test        # unit test protokol —40/40, tanpa HP
+.\gradlew.bat :core:protocol:test        # unit test protokol (tanpa HP)
 .\gradlew.bat :app:assembleDebug         # APK -> app\build\outputs\apk\debug\
 F:\Android_Studio\platform-tools\adb.exe install -r app\build\outputs\apk\debug\app-debug.apk
 ```
 
-Prasyarat: Android SDK (di `android/local.properties`) + JDK (di `gradle.properties`).
+Prasyarat: Android SDK (`android/local.properties`) + JDK. Colok HP →
+`adb devices` harus terdeteksi (status `device`, bukan `unauthorized`).
 
-**Validasi ke ECU:** izinkan Bluetooth → tab **Connect** → pilih modul BT (atau ketik MAC)
-→ tab **Console**: `TX 1B00` → `RX 1B01` → live otomatis jalan → tab Live → gauge hidup.
+### Android — install saja (APK sudah di-build)
 
-## Quick start — iOS (tanpa Mac)
+```powershell
+F:\Android_Studio\platform-tools\adb.exe install -r android\app\build\outputs\apk\debug\app-debug.apk
+```
 
-Build di **WSL** dengan [xtool](https://github.com/xtool-org/xtool) (setup lengkap &
-syarat "Preparing device" ada di [`ios/README.md`](ios/README.md)):
+### iOS — build + install via WSL (tanpa Mac)
 
 ```bash
 wsl -d Ubuntu-24.04 -u root
 cd /mnt/c/Users/<username>/<path>/ArTunning-Monitor/ios
-swift test    # unit test protokol —40/40 (Linux, tanpa device)
+swift test    # unit test (Linux, tanpa device)
 xtool dev     # build + sign (Apple ID) + install ke iPhone
 ```
 
+Setup WSL/xtool & syarat "Preparing device" lengkap di [`ios/README.md`](ios/README.md).
+Akun Apple ID gratis = profil **7 hari** → refresh = `xtool dev` lagi.
+
+**Validasi ke ECU (Android):** izinkan Bluetooth → tab **Connect** → pilih modul BT
+→ tab **Console**: `TX 1B00` → `RX 1B01` → live otomatis → tab Live → gauge hidup.
+
 Catatan iOS: transport = **WiFi ECU** (join AP → TCP `192.168.2.6:80`) karena iOS tidak
-mendukung Bluetooth SPP. Akun Apple ID gratis = profil **7 hari** → refresh = `xtool dev` lagi.
+mendukung Bluetooth SPP.
 
 ## Protokol dalam satu layar
 
