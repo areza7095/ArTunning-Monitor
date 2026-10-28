@@ -1,5 +1,13 @@
 # Konfigurasi xtool — https://github.com/xtool-org/xtool (lihat ios/README.md)
 version: 1
 bundleID: id.arvoid.artunningmonitor
+product: ArTunningMonitor
 # Key merge Info.plist (xtool membuat Info.plist bawaan lalu menggabung file ini)
 infoPath: Info.plist
+# App Groups utk widget (TelemetryStore) — xtool auto-create + assign saat signing
+entitlementsPath: App.entitlements
+# Widget extension (WidgetKit) — telemetri sbg now-playing di home screen
+extensions:
+  - product: ArTunningWidget
+    infoPath: Support/ArTunningWidget-Info.plist
+    entitlementsPath: Support/ArTunningWidget.entitlements

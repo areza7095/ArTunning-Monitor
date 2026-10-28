@@ -19,15 +19,24 @@ tidak butuh Mac sama sekali.
 
 ```
 ios/
-├─ Package.swift            # SwiftPM (library ArTunningMonitor + test target)
-├─ xtool.yml                # bundleID + infoPath (merge Info.plist)
+├─ Package.swift            # SwiftPM (library ArTunningMonitor + ArTunningWidget + test)
+├─ xtool.yml                # bundleID + infoPath + entitlementsPath + extensions (widget)
 ├─ Info.plist               # hanya key merge: NSLocalNetworkUsageDescription, CFBundleDisplayName
+├─ App.entitlements         # App Groups (group.id.arvoid.artunningmonitor) utk widget
+├─ Support/
+│   ├─ ArTunningWidget-Info.plist   # NSExtensionPointIdentifier = widgetkit-extension
+│   └─ ArTunningWidget.entitlements # App Groups (sama dgn app)
 ├─ Sources/ArTunningMonitor/
 │   ├─ Shared/              # port protokol (FrameCodec, LineSplitter, ReplyDispatch,
-│   │                       #   TelemetryParser, Crc32Stm32, LiveSession, Opcodes*generated)
+│   │                       #   TelemetryParser, Crc32Stm32, LiveSession, Opcodes*generated,
+│   │                       #   Metrics, TelemetryStore)
 │   └─ App/                 # SwiftUI: NetClient, AppViewModel, Connect/Live/Console, tema
 │                           #   (seluruh file App/ dibungkus #if os(iOS) agar test jalan di Linux)
-├─ Tests/ArTunningMonitorTests/ProtocolTests.swift   #40 XCTest (mirror Android)
+├─ Sources/ArTunningWidget/
+│   └─ Widget.swift         # WidgetKit: TelemetryWidget (small/medium), baca TelemetryStore
+├─ Tests/ArTunningMonitorTests/
+│   ├─ ProtocolTests.swift  #40 XCTest (mirror Android)
+│   └─ MetricsStoreTests.swift #MetricSet/MetricFormatter/TelemetryStore
 ├─ scripts/gen-opcodes.mjs  # docs/opcodes.json -> Sources/.../Opcodes.swift
 └─ tools/setup-relay.ps1    # relay usbmux iTunes (Windows) <-> WSL - jalankan saat IP WSL berubah
 ```
@@ -66,7 +75,7 @@ Yang sudah dijalankan sekali di mesin ini:
 wsl -d Ubuntu-24.04 -u root
 cd /mnt/c/Users/Administrator/Documents/Project/personal/xsr_juken_5/ios
 
-# unit test protokol (tanpa device, tanpa login) — wajib40/40:
+# unit test protokol (tanpa device, tanpa login) — wajib50/50:
 swift test
 
 # build iOS + sign (Apple ID) + install ke iPhone:

@@ -24,4 +24,16 @@
     <string name="cd_scan">Pindai perangkat Bluetooth</string>
     <string name="cd_status">Status koneksi</string>
     <string name="cd_send">Kirim frame</string>
+
+    <!-- Foreground service (Android Auto / widget membutuhkan koneksi tetap hidup) -->
+    <string name="notif_channel_name">Koneksi ECU</string>
+    <string name="notif_channel_desc">Notifikasi persisten selama tersambung ke ECU Juken (dibutuhkan widget &amp; Android Auto).</string>
+    <string name="notif_connecting">Menghubungkan ke %1$s…</string>
+    <string name="notif_live">LIVE · %1$s</string>
+
+    <!-- Widget home screen (Glance) -->
+    <string name="widget_description">Telemetri ECU Juken (RPM, TPS, AFR, dll) - mengikuti koneksi aplikasi.</string>
+    <string name="widget_config_title">Konfigurasi Widget Telemetri</string>
+    <string name="widget_config_subtitle">Pilih metrik yang ingin tampil di widget home screen.</string>
+    <string name="widget_config_save">Simpan Widget</string>
 </resources>

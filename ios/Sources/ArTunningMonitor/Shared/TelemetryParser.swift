@@ -4,7 +4,7 @@ import Foundation
 ///
 /// Layout: A603;<TPS>;<BAT>;<CORE>;<RPM>;<EOTx10>;<AFR>;<MAPx10>;<IATx10>;<PUMPx1000>;<INJx1000>
 /// Nilai masih mentah (raw); properti turunan menerapkan skala.
-public struct TelemetrySample: Equatable {
+public struct TelemetrySample: Equatable, Codable, Sendable {
     public let tpsPercent: Double
     public let batteryVolt: Double
     public let coreId: Int

@@ -18,6 +18,12 @@
         android:name="android.permission.BLUETOOTH_SCAN"
         android:usesPermissionFlags="neverForLocation" />
 
+    <!-- Foreground service koneksi ECU (widget + Android Auto butuh koneksi tetap hidup) -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+    <!-- API33+: agar notifikasi persisten tampil (dipakai konteks status koneksi) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="true" />
@@ -33,6 +39,43 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Pemegang koneksi ECU (SppClient + LiveSession) di background -->
+        <service
+            android:name=".core.EcUService"
+            android:exported="false"
+            android:foregroundServiceType="connectedDevice" />
+
+        <!-- Media session utk Android Auto (kategori Media: telemetri sbg now-playing) -->
+        <service
+            android:name=".core.EcUMediaService"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
+
+        <!-- Widget home screen (Glance) -->
+        <receiver
+            android:name=".widget.TelemetryWidgetReceiver"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/telemetry_widget_info" />
+        </receiver>
+
+        <!-- Konfigurasi widget (dibuka launcher saat widget ditambahkan) -->
+        <activity
+            android:name=".widget.WidgetConfigActivity"
+            android:exported="true"
+            android:theme="@style/Theme.ArTunning">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
     </application>

@@ -1,0 +1,184 @@
+package id.arvoid.artunningmonitor.core
+
+import android.app.PendingIntent
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.os.Bundle
+import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaMetadataCompat
+import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
+import androidx.media.MediaBrowserServiceCompat
+import id.arvoid.artunningmonitor.ConnStatus
+import id.arvoid.artunningmonitor.EcURepository
+import id.arvoid.artunningmonitor.MainActivity
+import id.arvoid.artunningmonitor.protocol.MetricFormatter
+import id.arvoid.artunningmonitor.protocol.MetricKey
+import id.arvoid.artunningmonitor.widget.WidgetConfig
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+
+/**
+ * MediaBrowserService utk Android Auto (kategori Media).
+ *
+ * Telemetri live dipublikasikan sebagai "now playing" track:
+ * judul = status + deret metrik (throttle 1 dtk), artwork = tile palet NomadKit.
+ * Koneksi Bluetooth tetap dipegang [EcUService]; service ini hanya memantau
+ * [EcURepository] dan memperbarui MediaSession.
+ *
+ * Test: Desktop Head Unit (DHU) + HP (lihat README).
+ */
+class EcUMediaService : MediaBrowserServiceCompat() {
+
+    private lateinit var session: MediaSessionCompat
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var collectJob: Job? = null
+    private var lastMetaMs = 0L
+    private var lastStatus: ConnStatus? = null
+
+    companion object {
+        private const val EMPTY_ROOT = "artunning.root"
+        private const val META_THROTTLE_MS = 1000L
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        session = MediaSessionCompat(this, "ArTunningMonitor").apply {
+            setSessionActivity(
+                PendingIntent.getActivity(
+                    this@EcUMediaService,
+                    0,
+                    Intent(this@EcUMediaService, MainActivity::class.java),
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
+            )
+            isActive = true
+        }
+        sessionToken = session.sessionToken
+        setSessionActivityInternal()
+
+        collectJob = scope.launch {
+            EcURepository.state.collectLatest { snap ->
+                val now = System.currentTimeMillis()
+                // throttle 1 dtk; publish langsung hanya saat transisi status
+                val statusChanged = snap.status != lastStatus
+                if (statusChanged || now - lastMetaMs >= META_THROTTLE_MS) {
+                    lastStatus = snap.status
+                    lastMetaMs = now
+                    publish(snap)
+                }
+            }
+        }
+    }
+
+    private fun setSessionActivityInternal() {
+        // PlaybackState awal: stopped (belum tersambung)
+        session.setPlaybackState(
+            PlaybackStateCompat.Builder()
+                .setActions(PlaybackStateCompat.ACTION_PLAY or PlaybackStateCompat.ACTION_PAUSE)
+                .setState(PlaybackStateCompat.STATE_STOPPED, 0, 1f)
+                .build(),
+        )
+    }
+
+    private fun publish(snap: EcURepository.Snapshot) {
+        val isLive = snap.status == ConnStatus.Streaming && snap.telemetry != null
+        val metrics = WidgetConfig.readMetrics(this).ifEmpty { MetricKey.DEFAULT }
+
+        val title = when {
+            isLive -> MetricFormatter.summary(snap.telemetry!!, metrics)
+            snap.status == ConnStatus.Streaming -> "Menunggu data…"
+            snap.status == ConnStatus.Connecting ||
+                snap.status == ConnStatus.Handshaking ||
+                snap.status == ConnStatus.LiveRequested -> "Menghubungkan…"
+            snap.status == ConnStatus.Reconnecting -> "Reconnecting…"
+            snap.status == ConnStatus.PermissionNeeded -> "Izin Bluetooth dibutuhkan"
+            snap.status == ConnStatus.Error -> snap.error ?: "Error"
+            else -> "Tidak tersambung"
+        }
+        val subtitle = snap.deviceName ?: getString(id.arvoid.artunningmonitor.R.string.app_name)
+
+        val art = tileArtwork(isLive)
+        session.setMetadata(
+            MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, title)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, subtitle)
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, getString(id.arvoid.artunningmonitor.R.string.app_name))
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, art)
+                .putBitmap(MediaMetadataCompat.METADATA_KEY_ART, art)
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION, -1L)
+                .build(),
+        )
+        session.setQueue(emptyList())
+        session.setQueueTitle(getString(id.arvoid.artunningmonitor.R.string.app_name))
+
+        val state = when {
+            isLive -> PlaybackStateCompat.STATE_PLAYING
+            snap.status == ConnStatus.Disconnected -> PlaybackStateCompat.STATE_STOPPED
+            else -> PlaybackStateCompat.STATE_BUFFERING
+        }
+        session.setPlaybackState(
+            PlaybackStateCompat.Builder()
+                .setActions(
+                    PlaybackStateCompat.ACTION_PLAY or
+                        PlaybackStateCompat.ACTION_PAUSE or
+                        PlaybackStateCompat.ACTION_STOP,
+                )
+                .setState(state, 0, 1f)
+                .build(),
+        )
+    }
+
+    /** Tile artwork sederhana: latar Sand + huruf status (LIVE/OFF) — palet NomadKit. */
+    private fun tileArtwork(isLive: Boolean): Bitmap {
+        val size = 256
+        val bmp = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bmp)
+        val bg = Paint().apply {
+            color = if (isLive) 0xFF166534.toInt() else 0xFFD4A373.toInt() // Forest / Sand
+            style = Paint.Style.FILL
+        }
+        canvas.drawRect(0f, 0f, size.toFloat(), size.toFloat(), bg)
+        val fg = Paint().apply {
+            color = if (isLive) 0xFFFFFFFF.toInt() else 0xFF2A1D0F.toInt()
+            textAlign = Paint.Align.CENTER
+            textSize = 72f
+            isFakeBoldText = true
+        }
+        val text = if (isLive) "LIVE" else "ArTunning"
+        val ty = size / 2f - (fg.descent() + fg.ascent()) / 2f
+        canvas.drawText(text, size / 2f, ty, fg)
+        return bmp
+    }
+
+    // ------------------------------------------------------------------ browse
+
+    override fun onGetRoot(
+        clientPackageName: String,
+        clientUid: Int,
+        rootHints: Bundle?,
+    ): BrowserRoot = BrowserRoot(EMPTY_ROOT, null)
+
+    override fun onLoadChildren(
+        parentId: String,
+        result: Result<MutableList<MediaBrowserCompat.MediaItem>>,
+    ) {
+        // Android Auto kategori Media: cukup "now playing" — tree browse kosong.
+        result.sendResult(mutableListOf())
+    }
+
+    override fun onDestroy() {
+        collectJob?.cancel()
+        scope.cancel()
+        session.isActive = false
+        session.release()
+        super.onDestroy()
+    }
+}

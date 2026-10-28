@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.compose.material.icons.extended)
     implementation(libs.compose.ui.tooling.preview)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.glance.appwidget)
+    implementation(libs.androidx.media)
     debugImplementation(libs.compose.ui.tooling)
 
     testImplementation(libs.junit)

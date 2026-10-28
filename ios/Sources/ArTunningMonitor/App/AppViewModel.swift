@@ -2,6 +2,7 @@
 import Foundation
 import NetworkExtension
 import SwiftUI
+import WidgetKit
 
 enum IosConnStatus {
     case disconnected, connecting, handshaking, liveRequested, streaming, reconnecting, error
@@ -34,6 +35,8 @@ final class AppViewModel: ObservableObject {
     private let net = NetClient()
     private let splitter = LineSplitter()
     private let session = LiveSession()
+    private let widgetStore = TelemetryStore()
+    private var lastWidgetPushMs: Int64 = 0
 
     private var tickTask: Task<Void, Never>?
     private var reconnectTask: Task<Void, Never>?
@@ -69,6 +72,7 @@ final class AppViewModel: ObservableObject {
         errorMessage = nil
         telemetry = nil
         appendLog(.info, "Menghubungkan ke \(host):\(p)…")
+        pushWidget(force: true)
         Task { @MainActor [weak self] in
             guard let self else { return }
             if await self.tryConnectOnce() {
@@ -93,6 +97,7 @@ final class AppViewModel: ObservableObject {
         status = .disconnected
         errorMessage = nil
         appendLog(.info, "Terputus manual")
+        pushWidget(force: true)
     }
 
     /// Satu percobaan koneksi TCP; bila sukses -> handshake `1B00` dikirim.
@@ -147,6 +152,7 @@ final class AppViewModel: ObservableObject {
             txs += session.onRxLine(line, nowMs: now)
             if ReplyDispatch.parse(line).isTelemetry, let t = TelemetryParser.parse(line) {
                 telemetry = t
+                pushWidget(force: false)
             }
         }
         if session.connected { syncStatus() }
@@ -169,6 +175,7 @@ final class AppViewModel: ObservableObject {
         if let t = reconnectTask, !t.isCancelled { return }
         status = .reconnecting
         errorMessage = "Reconnect (\(reason))"
+        pushWidget(force: true)
         reconnectTask = Task { @MainActor [weak self] in
             while !Task.isCancelled {
                 guard let self else { return }
@@ -252,11 +259,43 @@ final class AppViewModel: ObservableObject {
     // ------------------------------------------------------------------- intern
 
     private func syncStatus() {
+        let prev = status
         switch session.state {
         case .idle: status = .disconnected
         case .handshaking: status = .handshaking
         case .liveRequested: status = .liveRequested
         case .streaming: status = .streaming
+        }
+        if status != prev {
+            pushWidget(force: true) // transisi status -> update widget langsung
+        }
+    }
+
+    /// Dorong snapshot ke App Group + reload timeline widget (throttle1 dtk).
+    private func pushWidget(force: Bool) {
+        let now = nowMs()
+        if !force && now - lastWidgetPushMs < 1000 { return }
+        lastWidgetPushMs = now
+        let snap = TelemetrySnapshot(
+            status: widgetStatus(),
+            telemetry: telemetry,
+            telemetryAtMs: telemetry != nil ? now : 0,
+            deviceName: host,
+            error: errorMessage
+        )
+        widgetStore.saveSnapshot(snap)
+        WidgetCenter.shared.reloadTimelines(ofKind: "TelemetryWidget")
+    }
+
+    private func widgetStatus() -> WidgetConnStatus {
+        switch status {
+        case .disconnected: .disconnected
+        case .connecting: .connecting
+        case .handshaking: .handshaking
+        case .liveRequested: .liveRequested
+        case .streaming: .streaming
+        case .reconnecting: .reconnecting
+        case .error: .error
         }
     }
 

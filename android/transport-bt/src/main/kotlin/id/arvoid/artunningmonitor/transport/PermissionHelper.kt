@@ -15,15 +15,18 @@ import androidx.core.content.ContextCompat
  */
 object PermissionHelper {
 
-    fun requiredRuntimePermissions(): Array<String> =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            arrayOf(
-                Manifest.permission.BLUETOOTH_CONNECT,
-                Manifest.permission.BLUETOOTH_SCAN,
-            )
-        } else {
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
+    fun requiredRuntimePermissions(): Array<String> = when {
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU -> arrayOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            Manifest.permission.POST_NOTIFICATIONS, // notifikasi persisten FGS (API33+)
+        )
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> arrayOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+        )
+        else -> arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+    }
 
     fun hasAll(context: Context): Boolean = requiredRuntimePermissions().all {
         ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED

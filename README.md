@@ -123,8 +123,73 @@ Background `#FFFDF7` — plus aturan: jangan andalkan warna saja, siapkan skelet
 - [x] Reverse-engineering protokol ECU + spesifikasi berbukti
 - [x] Android app (Bluetooth SPP) — live monitor
 - [x] iOS app (WiFi TCP) — live monitor
+- [x] Widget home screen Android (Glance) + konfigurasi metrik
+- [x] Android Auto (Media Session — telemetri sbg now-playing)
+- [x] Widget iOS (WidgetKit + App Group via xtool)
+- [ ] CarPlay — **blocked by design** (lihat bawah)
 - [ ] Target ESP (bridge/gauge) dari `docs/opcodes.json`
 - [ ] Baca/tulis map & data logger (bulk + CRC) di aplikasi
+
+## Widget, Android Auto & CarPlay
+
+### Widget Android (Glance)
+
+Koneksi ECU dipegang **foreground service** (`EcUService`, type `connectedDevice`)
++ notifikasi persisten "Terhubung ke ECU". Widget membaca snapshot dari
+`EcURepository` (StateFlow) — **tidak** membuka koneksi sendiri.
+
+- Tambah widget dari home screen → layar konfigurasi multi-select metrik
+  (RPM, TPS, AFR, EOT, MAP, IAT, BATT, PUMP, INJ).
+- Update ~1 dtk (throttle mengikuti notifikasi service); staleness eksplisit
+  "update N dtk lalu".
+- Pilihan metrik **global** (semua instance widget memakai pilihan sama) — MVP.
+
+### Android Auto (kategori Media)
+
+`EcUMediaService` (MediaBrowserServiceCompat + MediaSessionCompat):
+telemetri live dipublikasikan sebagai **now-playing track**
+(judul = deret metrik terpilih, artwork tile NomadKit).
+
+**Test tanpa mobil (Desktop Head Unit):**
+
+1. Install [Android Auto](https://play.google.com/store/apps/details?id=com.google.android.projection.gearhead)
+   di HP + [Desktop Head Unit](https://developer.android.com/training/cars/downloads)
+   (butuh Java; jalankan `desktop-head-unit.jar`).
+2. Colok HP ke PC (USB) → aktifkan **Unknown sources** di pengaturan developer
+   Android Auto (di DHU: Start head unit → menu ⋮ → Settings → Developer →
+   Unknown sources).
+3. Buka app → Connect ke ECU → buka DHU → app muncul di daftar Media →
+   "now playing" = telemetri live.
+4. HP: Android 9+ (API 28); app minSdk 26 — aman.
+
+### iOS Widget (WidgetKit + App Group)
+
+`TelemetryStore` menyimpan snapshot di App Group
+`group.id.arvoid.artunningmonitor` (UserDefaults suite).
+App menulis tiap frame `A603` (throttle 1 dtk) + `WidgetCenter.reloadTimelines`.
+Widget `ArTunningWidget` (small/medium) menampilkan metrik terpilih + staleness.
+
+Build & install via `xtool dev` — xtool **membuat & assign App Group otomatis**
+saat signing (dukungan free account; sama dgn bundle prefix `XTL-xxxx.`).
+Entitlements: `ios/App.entitlements` (app) + `ios/Support/ArTunningWidget.entitlements`.
+
+### CarPlay — butuh izin Apple (tidak bisa free account)
+
+Berdasarkan [Requesting CarPlay Entitlements](https://developer.apple.com/contact/carplay/)
+(dokumen resmi Apple):
+
+- Wajib **minta entitlement** via CarPlay Contact Us + tandatangani
+  *CarPlay Entitlement Addendum* → Apple me-review tiap aplikasi.
+- Entitlement masuk akun developer (managed capability) → butuh
+  **Apple Developer berbayar** + lolos review.
+- Kategori entitlement yang tersedia: `carplay-audio`, `carplay-communication`,
+  `carplay-maps` (navigation), `carplay-parking`, `carplay-charging`,
+  `carplay-quick-ordering` — **tidak ada** kategori dashboard/telemetri/gauge.
+- CarPlay Simulator hanya untuk app yang **sudah** punya entitlement.
+
+Kesimpulan: **bukan masalah kode, tapi izin Apple.** Tidak ditulis kode CarPlay.
+Bila kelak lolos review, syarat teknis: CP templates + `entitlementsPath`
+sudah tersedia di xtool.
 
 ## License
 
