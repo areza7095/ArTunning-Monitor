@@ -2,7 +2,7 @@ import XCTest
 @testable import ArTunningMonitor
 
 /// Mirror persis unit test core:protocol Android (37 golden vectors).
-/// Sumber vektor: docs/juken5-protocol-spec.md bagian11 + run CRC independen.
+/// Sumber vektor: docs/en/juken5-protocol-spec.md bagian11 + run CRC independen.
 final class ProtocolTests: XCTestCase {
 
     // MARK: - FrameCodec

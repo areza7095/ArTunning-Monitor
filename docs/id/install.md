@@ -1,7 +1,9 @@
 # Install — ArTunning Monitor
 
+[English](../en/install.md) · **Bahasa Indonesia**
+
 Panduan build & install dari **Windows** (host) ke **Android** / **iPhone**.
-Ringkasan satu layar juga ada di [README](../README.md#install).
+Ringkasan satu layar juga ada di [README](../../README.id.md#install).
 
 ## Prasyarat
 
@@ -11,8 +13,8 @@ Ringkasan satu layar juga ada di [README](../README.md#install).
 | Android SDK | Android | Path di `android/local.properties` (`sdk.dir=...`) |
 | adb (platform-tools) | Install APK | Mesin ini: `F:\Android_Studio\platform-tools\adb.exe` |
 | HP Android (USB debugging) | Install + test | Settings → Developer → USB debugging ON |
-| WSL Ubuntu-24.04 + Swift + xtool | iOS | Setup lengkap di [`ios/README.md`](../ios/README.md) |
-| iPhone (Trust + Developer Mode) | iOS | Kabel data; lihat `ios/README.md` |
+| WSL Ubuntu-24.04 + Swift + xtool | iOS | Setup lengkap di [`ios/README.id.md`](../../ios/README.id.md) |
+| iPhone (Trust + Developer Mode) | iOS | Kabel data; lihat `ios/README.id.md` |
 
 ## Windows — build + install ke Android
 
@@ -63,7 +65,7 @@ xtool dev        # build + sign (Apple ID) + install ke iPhone
 
 Prasyarat device (sekali + setelah reboot): kabel data → Trust →
 **Developer Mode** ON + restart → Trust sertifikat. Detail & troubleshooting:
-[`ios/README.md`](../ios/README.md).
+[`ios/README.id.md`](../../ios/README.id.md).
 
 Apple ID **gratis**: profil berlaku **7 hari** → refresh = jalankan `xtool dev` lagi.
 
@@ -73,7 +75,7 @@ Apple ID **gratis**: profil berlaku **7 hari** → refresh = jalankan `xtool dev
 2. Tab **Connect** → pilih modul BT (Android) atau pastikan iPhone join AP ECU (iOS).
 3. Tab **Console**: `TX 1B00` → balasan **`RX 1B01`** = handshake OK.
 4. Live jalan otomatis → tab **Live** → gauge hidup.
-5. (Opsional) Tambah **widget** home screen; Android Auto: lihat checklist DHU di [README](../README.md#widget-android-auto--carplay).
+5. (Opsional) Tambah **widget** home screen; Android Auto: lihat checklist DHU di [README](../../README.id.md#widget-android-auto--carplay).
 
 ## Troubleshooting singkat
 

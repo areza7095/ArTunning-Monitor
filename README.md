@@ -1,226 +1,234 @@
 # ArTunning Monitor
 
+**English** · [Bahasa Indonesia](README.id.md)
+
 [![License](https://img.shields.io/github/license/areza7095/ArTunning-Monitor)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Android%20%7C%20iOS-166534)](android/)
-[![Protocol%20tests](https://img.shields.io/badge/protocol%20tests-40%20%C3%97%202%20platform-D4A373)](docs/juken5-protocol-spec.md)
+[![Protocol%20tests](https://img.shields.io/badge/protocol%20tests-40%20%C3%97%202%20platform-D4A373)](docs/en/juken5-protocol-spec.md)
 
-**Monitor live ECU motor injeksi BRT Juken 5 Plus dari HP** — Android lewat *Bluetooth SPP*, iOS lewat *WiFi TCP* — plus **spesifikasi protokol ECU yang terbuka** biar kamu bisa bikin client sendiri (ESP, web, tooling).
+**Live-monitor the ECU of a BRT Juken 5 Plus injection motorcycle from your phone** — Android over *Bluetooth SPP*, iOS over *WiFi TCP* — plus an **open ECU protocol specification** so you can build your own client (ESP, web, tooling).
 
 ```
-Connect  → 1B00/1B01 (handshake)  →  auto-live: 1617 → 160A  →  A603;…  →  gauge hidup
+Connect  → 1B00/1B01 (handshake)  →  auto-live: 1617 → 160A  →  A603;…  →  gauges live
 ```
 
-## Tentang
+## About
 
-Aplikasi monitoring live yang ringan untuk ECU **Bintang Racing Team Juken 5 Plus**:
+A lightweight live monitoring app for the **Bintang Racing Team Juken 5 Plus** ECU:
 
-- **Live gauge** RPM, TPS, AFR, EOT, MAP, IAT, BATT, arus injeksi — skala sesuai protokol asli.
-- **Auto-live** — begitu koneksi OK (balasan `1B01` ATAU fallback 1,5 dtk), mode live jalan
-  tanpa klik apa pun dan tab Live terbuka sendiri.
-- **Debug console** — log mentah TX/RX + kirim frame manual (alat validasi protokol ke ECU).
-- **Auto-reconnect** dengan backoff (2/5/10/30 dtk) + keepalive `1B00` tiap 3 dtk.
-- **Design system NomadKit** (light eksak + dark turunan), status selalu ikon + teks.
-- **40 unit test protokol × 2 platform** (JVM & Linux) dari golden vectors yang sama.
+- **Live gauges** for RPM, TPS, AFR, EOT, MAP, IAT, BATT, injection current — scaled exactly per the real protocol.
+- **Auto-live** — once the connection is OK (`1B01` reply OR 1.5 s fallback), live mode starts
+  with no taps and the Live tab opens by itself.
+- **Debug console** — raw TX/RX log + manual frame sender (protocol validation tool against the ECU).
+- **Auto-reconnect** with backoff (2/5/10/30 s) + `1B00` keepalive every 3 s.
+- **NomadKit design system** (exact light + derived dark), every status is icon + text.
+- **40 protocol unit tests × 2 platforms** (JVM & Linux) from the same golden vectors.
 
-> ⚠️ **Disclaimer** — Proyek pribadi, **tidak berafiliasi dengan Bintang Racing Team**.
-> "Juken", "Bintang Racing Team", dan merek terkait adalah milik pemiliknya masing-masing;
-> nama disini hanya rujukan faktual. Dokumentasi protokol dihasilkan dari analisis
-> black-box aplikasi desktop resmi untuk keperluan **interoperabilitas**, tanpa
-> menyalin kode milik pihak lain. Bukan produk resmi BRT — risiko penggunaan di kendaraan
-  ada di tanganmu sendiri.
+> ⚠️ **Disclaimer** — Personal project, **not affiliated with Bintang Racing Team**.
+> "Juken", "Bintang Racing Team", and related marks belong to their respective owners;
+> names here are used only as factual references. The protocol documentation was produced by
+> black-box analysis of the official desktop application for **interoperability** purposes,
+> without copying anyone else's code. Not an official BRT product — using it on a vehicle
+> is at your own risk.
 
 ## Status
 
 | Target | Status |
 |---|---|
-| **Android** (Bluetooth SPP) | ✅ APK teruji langsung ke ECU ·40/40 test |
-| **iOS** (WiFi TCP) | ✅ Terpasang di iPhone via [xtool](https://github.com/xtool-org/xtool) (Apple ID gratis) ·40/40 test |
-| **Spesifikasi protokol** | ✅ Lengkap + `opcodes.json` machine-readable |
-| **ESP / bridge** | 🕜 menyusul — pakai `docs/opcodes.json` yang sama |
+| **Android** (Bluetooth SPP) | ✅ APK tested directly against the ECU · 40/40 tests |
+| **iOS** (WiFi TCP) | ✅ Installed on iPhone via [xtool](https://github.com/xtool-org/xtool) (free Apple ID) · 40/40 tests |
+| **Protocol specification** | ✅ Complete + machine-readable `opcodes.json` |
+| **ESP / bridge** | 🕜 coming — reuse the same `docs/opcodes.json` |
 
-## Struktur monorepo
+## Monorepo structure
 
 ```
-docs/                          # SOURCE OF TRUTH bersama antar target
-├─ juken5-protocol-spec.md     # spesifikasi protokol ECU (bukti IL disertakan)
-├─ opcodes.json                #151 opcode, layout struct, timing, transport
-├─ install.md                  # build & install Windows -> Android / iPhone
-└─ design/nomadkit.md          # design system NomadKit (DESIGN.md, MIT)
+docs/                          # SHARED SOURCE OF TRUTH across targets
+├─ en/                         # English docs (default)
+│  ├─ juken5-protocol-spec.md  # ECU protocol spec (IL evidence included)
+│  └─ install.md               # build & install Windows -> Android / iPhone
+├─ id/                         # Bahasa Indonesia docs
+│  ├─ juken5-protocol-spec.md
+│  └─ install.md
+├─ opcodes.json                # 151 opcodes, struct layout, timing, transport (language-neutral)
+├─ README.md · README.id.md    # docs index (EN / ID)
+└─ design/nomadkit.md          # NomadKit design system (DESIGN.md, MIT)
 
 android/                       # Kotlin + Jetpack Compose (Bluetooth SPP)
-├─ core/protocol/              # protokol murni JVM + codegen Opcodes.kt + unit test
-├─ transport-bt/               # pipe byte Bluetooth (tahu koneksi, TIDAK tahu protokol)
-└─ app/                        # UI Compose (Connect / Live / Console)
+├─ core/protocol/              # pure-JVM protocol + Opcodes.kt codegen + unit tests
+├─ transport-bt/               # Bluetooth byte pipe (knows the connection, NOT the protocol)
+└─ app/                        # Compose UI (Connect / Live / Console)
 
-ios/                           # SwiftUI (WiFi TCP — iOS tidak punya BT SPP)
-├─ Sources/ArTunningMonitor/   # Shared (protokol) + App (SwiftUI, guard #if os(iOS))
-├─ Tests/                      # XCTest — mirror40 test Android
-├─ Package.swift · xtool.yml   # SwiftPM + xtool (build tanpa Mac)
+ios/                           # SwiftUI (WiFi TCP — iOS has no BT SPP)
+├─ Sources/ArTunningMonitor/   # Shared (protocol) + App (SwiftUI, #if os(iOS) guards)
+├─ Tests/                      # XCTest — mirror of the 40 Android tests
+├─ README.md · README.id.md    # iOS build guide (EN / ID)
+├─ Package.swift · xtool.yml   # SwiftPM + xtool (build without a Mac)
 └─ tools/setup-relay.ps1       # relay usbmux iTunes <-> WSL
 
-esp/                           # (menyusul) target ESP
+esp/                           # (coming) ESP target
 ```
 
-**Konvensi:**
-1. `docs/` = source of truth — kode di-*generate*/di-port dari dokumen, bukan sebaliknya.
-2. Target baru = subfolder baru dengan build sendiri; jangan saling copy kode.
-3. Transport terpisah dari protokol (tambah WiFi/transport lain tanpa ubah protokol).
+**Conventions:**
+1. `docs/` = source of truth — code is *generated*/ported from the documents, not the other way around.
+2. New target = new subfolder with its own build; never copy code between targets.
+3. Transport is separate from protocol (add WiFi/another transport without touching the protocol).
 
 ## Install
 
-Detail lengkap (prasyarat + troubleshooting) ada di [`docs/install.md`](docs/install.md).
+Full details (prerequisites + troubleshooting) live in [`docs/en/install.md`](docs/en/install.md).
 
-### Windows — build + install ke Android
+### Windows — build + install to Android
 
 ```powershell
 cd android
-.\gradlew.bat :core:protocol:test        # unit test protokol (tanpa HP)
+.\gradlew.bat :core:protocol:test        # protocol unit tests (no phone needed)
 .\gradlew.bat :app:assembleDebug         # APK -> app\build\outputs\apk\debug\
 F:\Android_Studio\platform-tools\adb.exe install -r app\build\outputs\apk\debug\app-debug.apk
 ```
 
-Prasyarat: Android SDK (`android/local.properties`) + JDK. Colok HP →
-`adb devices` harus terdeteksi (status `device`, bukan `unauthorized`).
+Prerequisites: Android SDK (`android/local.properties`) + JDK. Plug in the phone →
+`adb devices` must list it (status `device`, not `unauthorized`).
 
-### Android — install saja (APK sudah di-build)
+### Android — install only (APK already built)
 
 ```powershell
 F:\Android_Studio\platform-tools\adb.exe install -r android\app\build\outputs\apk\debug\app-debug.apk
 ```
 
-### iOS — build + install via WSL (tanpa Mac)
+### iOS — build + install via WSL (no Mac required)
 
 ```bash
 wsl -d Ubuntu-24.04 -u root
 cd /mnt/c/Users/<username>/<path>/ArTunning-Monitor/ios
-swift test    # unit test (Linux, tanpa device)
-xtool dev     # build + sign (Apple ID) + install ke iPhone
+swift test    # unit tests (Linux, no device)
+xtool dev     # build + sign (Apple ID) + install to iPhone
 ```
 
-Setup WSL/xtool & syarat "Preparing device" lengkap di [`ios/README.md`](ios/README.md).
-Akun Apple ID gratis = profil **7 hari** → refresh = `xtool dev` lagi.
+Full WSL/xtool setup and the "Preparing device" requirements are in [`ios/README.md`](ios/README.md).
+Free Apple ID = profile valid for **7 days** → refresh = run `xtool dev` again.
 
-**Validasi ke ECU (Android):** izinkan Bluetooth → tab **Connect** → pilih modul BT
-→ tab **Console**: `TX 1B00` → `RX 1B01` → live otomatis → tab Live → gauge hidup.
+**Validate against the ECU (Android):** allow Bluetooth → **Connect** tab → pick the BT
+module → **Console** tab: `TX 1B00` → `RX 1B01` → live starts automatically → Live tab → gauges up.
 
-Catatan iOS: transport = **WiFi ECU** (join AP → TCP `192.168.2.6:80`) karena iOS tidak
-mendukung Bluetooth SPP.
+iOS note: transport = **ECU WiFi** (join the AP → TCP `192.168.2.6:80`) because iOS does
+not support Bluetooth SPP.
 
-## Protokol dalam satu layar
+## Protocol on one screen
 
-Format baris ASCII, TX = `<HEX>;<param>\r\n` (HEX = opcode `0x1601` → `"1601"`):
+Line-based ASCII frames, TX = `<HEX>;<param>\r\n` (HEX = opcode `0x1601` → `"1601"`):
 
-| Bagian | Nilai kunci |
+| Part | Key values |
 |---|---|
-| Handshake | kirim `1B00` → balasan `1B01` (keepalive tiap3 dtk, watchdog17 dtk) |
-| Masuk live | `1617` lalu `160A` tiap500 ms (maks25×) → frame `A603;…` |
-| Telemetri `A603` | `TPS;BAT;CORE;RPM;EOT×10;AFR;MAP×10;IAT×10;PUMP×1000;INJ×1000` |
-| Bulk map/param/log | marker `#B1#`/`#B2#`/`#B3#` … `*eE*\r\n`, ukuran1012 /10248 /28 byte |
-| Integrity | **CRC32 ala STM32** — init `0xFFFFFFFF`, poly `0x04C11DB7`, kata little-endian |
+| Handshake | send `1B00` → reply `1B01` (keepalive every 3 s, watchdog 17 s) |
+| Enter live | `1617` then `160A` every 500 ms (max 25×) → frame `A603;…` |
+| Telemetry `A603` | `TPS;BAT;CORE;RPM;EOT×10;AFR;MAP×10;IAT×10;PUMP×1000;INJ×1000` |
+| Bulk map/param/log | markers `#B1#`/`#B2#`/`#B3#` … `*eE*\r\n`, sizes 1012 / 10248 / 28 bytes |
+| Integrity | **STM32-style CRC32** — init `0xFFFFFFFF`, poly `0x04C11DB7`, little-endian words |
 | Opcode | Read `0x16xx` · Write `0x26xx/0x36xx` · Bulk `0x15xx/0x95xx` · Reply `0x96xx/0xA6xx` |
 
-Dokumen lengkap (termasuk **bukti IL per klaim**, layout struct per-byte, tabel dispatch):
-[`docs/juken5-protocol-spec.md`](docs/juken5-protocol-spec.md) ·
-mesin-readable: [`docs/opcodes.json`](docs/opcodes.json) — inilah yang dipakai codegen
-`Opcodes.kt` (Android) & `Opcodes.swift` (iOS); target ESP nanti juga dari file ini.
+Full document (including **per-claim IL evidence**, byte-level struct layout, dispatch tables):
+[`docs/en/juken5-protocol-spec.md`](docs/en/juken5-protocol-spec.md) ·
+machine-readable: [`docs/opcodes.json`](docs/opcodes.json) — this is what feeds the codegen for
+`Opcodes.kt` (Android) and `Opcodes.swift` (iOS); the future ESP target will use it too.
 
 ## Design system
 
-Palet & aturan dari [NomadKit](docs/design/nomadkit.md) (DESIGN.md, MIT, by @chef):
-Sand `#D4A373` (aksi utama) · Ocean `#0891B2` (sekunder) · Forest `#166534` (sukses) ·
-Background `#FFFDF7` — plus aturan: jangan andalkan warna saja, siapkan skeleton state.
+Palette & rules from [NomadKit](docs/design/nomadkit.md) (DESIGN.md, MIT, by @chef):
+Sand `#D4A373` (primary action) · Ocean `#0891B2` (secondary) · Forest `#166534` (success) ·
+Background `#FFFDF7` — plus the rule: never rely on color alone, always prepare a skeleton state.
 
 ## Roadmap
 
-- [x] Reverse-engineering protokol ECU + spesifikasi berbukti
+- [x] Reverse-engineered ECU protocol + evidence-backed specification
 - [x] Android app (Bluetooth SPP) — live monitor
 - [x] iOS app (WiFi TCP) — live monitor
-- [x] Widget home screen Android (Glance) + konfigurasi metrik
-- [x] Android Auto (Media Session — telemetri sbg now-playing)
-- [x] Widget iOS (WidgetKit + App Group via xtool)
-- [ ] CarPlay — **blocked by design** (lihat bawah)
-- [ ] Target ESP (bridge/gauge) dari `docs/opcodes.json`
-- [ ] Baca/tulis map & data logger (bulk + CRC) di aplikasi
+- [x] Android home-screen widget (Glance) + metric configuration
+- [x] Android Auto (Media Session — telemetry as now-playing)
+- [x] iOS widget (WidgetKit + App Groups via xtool)
+- [ ] CarPlay — **blocked by design** (see below)
+- [ ] ESP target (bridge/gauge) from `docs/opcodes.json`
+- [ ] Read/write maps & data logger (bulk + CRC) inside the apps
 
-## Widget, Android Auto & CarPlay
+## Widgets, Android Auto & CarPlay
 
-### Widget Android (Glance)
+### Android widget (Glance)
 
-Koneksi ECU dipegang **foreground service** (`EcUService`, type `connectedDevice`)
-+ notifikasi persisten "Terhubung ke ECU". Widget membaca snapshot dari
-`EcURepository` (StateFlow) — **tidak** membuka koneksi sendiri.
+The ECU connection is held by a **foreground service** (`EcUService`, type `connectedDevice`)
++ persistent "Connected to ECU" notification. The widget reads a snapshot from
+`EcURepository` (StateFlow) — it does **not** open its own connection.
 
-- Tambah widget dari home screen → layar konfigurasi multi-select metrik
+- Add the widget from the home screen → multi-select metric configuration screen
   (RPM, TPS, AFR, EOT, MAP, IAT, BATT, PUMP, INJ).
-- Update ~1 dtk (throttle mengikuti notifikasi service); staleness eksplisit
-  "update N dtk lalu".
-- Pilihan metrik **global** (semua instance widget memakai pilihan sama) — MVP.
+- Updates ~1 s (throttled to the service notification); staleness is explicit
+  ("updated N s ago").
+- Metric choice is **global** (all widget instances share it) — MVP.
 
-### Android Auto (kategori Media)
+### Android Auto (media category)
 
 `EcUMediaService` (MediaBrowserServiceCompat + MediaSessionCompat):
-telemetri live dipublikasikan sebagai **now-playing track**
-(judul = deret metrik terpilih, artwork tile NomadKit).
+live telemetry is published as a **now-playing track**
+(title = the selected metric row, NomadKit tile artwork).
 
-**Test tanpa mobil (Desktop Head Unit):**
+**Test without a car (Desktop Head Unit):**
 
 1. Install [Android Auto](https://play.google.com/store/apps/details?id=com.google.android.projection.gearhead)
-   di HP + [Desktop Head Unit](https://developer.android.com/training/cars/downloads)
-   (butuh Java; jalankan `desktop-head-unit.jar`).
-2. Colok HP ke PC (USB) → aktifkan **Unknown sources** di pengaturan developer
-   Android Auto (di DHU: Start head unit → menu ⋮ → Settings → Developer →
+   on the phone + [Desktop Head Unit](https://developer.android.com/training/cars/downloads)
+   (needs Java; run `desktop-head-unit.jar`).
+2. Plug the phone into the PC (USB) → enable **Unknown sources** in the Android Auto
+   developer settings (in DHU: Start head unit → menu ⋮ → Settings → Developer →
    Unknown sources).
-3. Buka app → Connect ke ECU → buka DHU → app muncul di daftar Media →
-   "now playing" = telemetri live.
-4. HP: Android 9+ (API 28); app minSdk 26 — aman.
+3. Open the app → Connect to the ECU → open DHU → the app appears under Media →
+   "now playing" = live telemetry.
+4. Phone: Android 9+ (API 28); app minSdk 26 — fine.
 
-### iOS Widget (WidgetKit + App Group)
+### iOS widget (WidgetKit + App Group)
 
-`TelemetryStore` menyimpan snapshot di App Group
+`TelemetryStore` keeps snapshots in App Group
 `group.id.arvoid.artunningmonitor` (UserDefaults suite).
-App menulis tiap frame `A603` (throttle 1 dtk) + `WidgetCenter.reloadTimelines`.
-Widget `ArTunningWidget` (small/medium) menampilkan metrik terpilih + staleness.
+The app writes on every `A603` frame (1 s throttle) + `WidgetCenter.reloadTimelines`.
+Widget `ArTunningWidget` (small/medium) shows the selected metrics + staleness.
 
-Build & install via `xtool dev` — xtool **membuat & assign App Group otomatis**
-saat signing (dukungan free account; sama dgn bundle prefix `XTL-xxxx.`).
+Build & install via `xtool dev` — xtool **creates & assigns the App Group automatically**
+during signing (free-account support; same as the bundle prefix `XTL-xxxx.`).
 Entitlements: `ios/App.entitlements` (app) + `ios/Support/ArTunningWidget.entitlements`.
 
-### CarPlay — butuh izin Apple (tidak bisa free account)
+### CarPlay — requires an Apple grant (not possible with a free account)
 
-Berdasarkan [Requesting CarPlay Entitlements](https://developer.apple.com/contact/carplay/)
-(dokumen resmi Apple):
+Based on [Requesting CarPlay Entitlements](https://developer.apple.com/contact/carplay/)
+(Apple's official document):
 
-- Wajib **minta entitlement** via CarPlay Contact Us + tandatangani
-  *CarPlay Entitlement Addendum* → Apple me-review tiap aplikasi.
-- Entitlement masuk akun developer (managed capability) → butuh
-  **Apple Developer berbayar** + lolos review.
-- Kategori entitlement yang tersedia: `carplay-audio`, `carplay-communication`,
+- You must **request the entitlement** via CarPlay Contact Us and sign the
+  *CarPlay Entitlement Addendum* → Apple reviews every app.
+- The entitlement is a managed capability on a developer account → requires a
+  **paid Apple Developer** membership plus passing review.
+- Available entitlement categories: `carplay-audio`, `carplay-communication`,
   `carplay-maps` (navigation), `carplay-parking`, `carplay-charging`,
-  `carplay-quick-ordering` — **tidak ada** kategori dashboard/telemetri/gauge.
-- CarPlay Simulator hanya untuk app yang **sudah** punya entitlement.
+  `carplay-quick-ordering` — there is **no** dashboard/telemetry/gauge category.
+- The CarPlay Simulator only works for apps that **already** hold the entitlement.
 
-Kesimpulan: **bukan masalah kode, tapi izin Apple.** Tidak ditulis kode CarPlay.
-Bila kelak lolos review, syarat teknis: CP templates + `entitlementsPath`
-sudah tersedia di xtool.
+Conclusion: **not a code problem, an Apple permission problem.** No CarPlay code will be written.
+If review ever passes, the technical requirements (CP templates + `entitlementsPath`)
+are already available in xtool.
 
 ## License
 
-**Copyright (c)2026 Ahmad Reza A.** Dilisensikan di bawah
+**Copyright (c) 2026 Ahmad Reza A.** Licensed under
 [CC BY-NC 4.0](LICENSE) — *Attribution-NonCommercial*.
 
-- **Boleh**: share, fork, modifikasi, pelajari — **untuk keperluan non-komersial** —
-  selama copyright notice `©2026 Ahmad Reza A` tetap ada dan lisensinya dirujuk.
-- **Tidak boleh tanpa izin**: penggunaan **komersial** (dijual, layanan berbayar, dsb.)
-  — hubungi pemilik: [@areza7095](https://github.com/areza7095).
-- Lihat [LICENSE](LICENSE) untuk teks lengkap dan resmi.
+- **Allowed**: share, fork, modify, learn — **for non-commercial purposes** —
+  as long as the copyright notice `©2026 Ahmad Reza A` remains and the license is referenced.
+- **Not allowed without permission**: **commercial** use (sold, paid services, etc.)
+  — contact the owner: [@areza7095](https://github.com/areza7095).
+- See [LICENSE](LICENSE) for the full official text.
 
 ## Credits
 
-- [NomadKit](docs/design/nomadkit.md) design system oleh **@chef** (DESIGN.md, MIT).
-- [xtool](https://github.com/xtool-org/xtool) — build & install iOS dari Windows/Linux (MIT).
-- Dokumentasi protokol: hasil analisis black-box terhadap aplikasi desktop resmi BRT
-  (metode + bukti ada di [`docs/juken5-protocol-spec.md`](docs/juken5-protocol-spec.md)).
+- [NomadKit](docs/design/nomadkit.md) design system by **@chef** (DESIGN.md, MIT).
+- [xtool](https://github.com/xtool-org/xtool) — build & install iOS from Windows/Linux (MIT).
+- Protocol documentation: black-box analysis of the official BRT desktop app
+  (method + evidence in [`docs/en/juken5-protocol-spec.md`](docs/en/juken5-protocol-spec.md)).
 
-<!-- Media: taruh screenshot di docs/media/ (Connect / Live / Console) lalu sisipkan di sini:
+<!-- Media: drop screenshots in docs/media/ (Connect / Live / Console) then embed here:
 ![Live](docs/media/live.png)
 -->

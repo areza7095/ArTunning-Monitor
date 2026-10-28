@@ -2,7 +2,7 @@ import Foundation
 
 /// Codec frame baris protokol ECU Juken 5 Plus.
 ///
-/// Sumber: docs/juken5-protocol-spec.md bagian 3.1 —
+/// Sumber: docs/en/juken5-protocol-spec.md bagian 3.1 —
 /// TX = "<HEX>" atau "<HEX>;<param>" diakhiri CRLF;
 /// HEX = opcode.ToString("X") (huruf besar, tanpa padding nol).
 /// Selaras dgn core:protocol Kotlin (FrameCodec.kt).

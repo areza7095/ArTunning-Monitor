@@ -11,7 +11,7 @@ import java.util.UUID
 /**
  * Transport Bluetooth SPP (RFCOMM) — HANYA lewat byte, tidak tahu protokol.
  *
- * Urutan percobaan koneksi (semua hasil dari docs/juken5-protocol-spec.md bagian 8.3):
+ * Urutan percobaan koneksi (semua hasil dari docs/en/juken5-protocol-spec.md bagian 8.3):
  *  1. UUID SPP standar00001101-0000-1000-8000-00805F9B34FB (secure)
  *  2. SPP standar (insecure)
  *  3. UUID custom ECU2DA0CC0E-1927-4CE8-A6BF-1B7DAF4BB9D4 — bukti ApplicationUpdater

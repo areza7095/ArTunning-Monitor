@@ -1,11 +1,13 @@
 # Spesifikasi Protokol ECU — Bintang Racing Team Juken 5 Plus
 
+[English](../en/juken5-protocol-spec.md) · **Bahasa Indonesia**
+
 > Dokumen referensi interoperabilitas untuk membangun aplikasi custom (Android/ESP/desktop)
 > yang berbicara langsung dengan ECU Juken 5 Plus. Seluruh klaim disertai **bukti**
 > berupa tipe/method + offset IL dari binary resmi.
 >
 > **Versi dokumen:** 1.0 (2026-10-27)
-> **Data mesin-readable:** [`opcodes.json`](opcodes.json) (tabel opcode, layout struct, timing, transport)
+> **Data mesin-readable:** [`opcodes.json`](../opcodes.json) (tabel opcode, layout struct, timing, transport)
 
 ---
 
@@ -769,6 +771,6 @@ TX  #;8080;MyEcuWifi;rahasia123;\r\n
 
 ## Appendix B — Struktur dokumen terkait
 
-- [`opcodes.json`](opcodes.json) — semua opcode (desimal+hex), pasang korelasi, dispatch,
+- [`opcodes.json`](../opcodes.json) — semua opcode (desimal+hex), pasang korelasi, dispatch,
   frame literal, marker bulk, parameter CRC, tabel telemetri, **layout seluruh struct (offset per field)**,
   timing, profil transport, item terbuka.

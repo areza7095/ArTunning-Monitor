@@ -7,7 +7,7 @@ import org.junit.Test
 
 class TelemetryParserTest {
 
-    // Contoh transkrip dari docs/juken5-protocol-spec.md bagian 11.
+    // Contoh transkrip dari docs/en/juken5-protocol-spec.md bagian 11.
     private val sampleLine = "A603;12;12.6;0;3450;852;12.5;1013;345;1520;890"
 
     @Test

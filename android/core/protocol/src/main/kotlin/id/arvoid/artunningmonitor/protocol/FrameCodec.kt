@@ -3,7 +3,7 @@ package id.arvoid.artunningmonitor.protocol
 /**
  * Codec frame baris protokol ECU Juken 5 Plus.
  *
- * Sumber: docs/juken5-protocol-spec.md bagian 3.1 —
+ * Sumber: docs/en/juken5-protocol-spec.md bagian 3.1 —
  * TX = "<HEX>" atau "<HEX>;<param>" diakhiri CRLF;
  * HEX = opcode.ToString("X") (huruf besar, tanpa padding nol).
  * Bukti IL: Juken_5.Protocol.CommManagement.AddCommMessage.
