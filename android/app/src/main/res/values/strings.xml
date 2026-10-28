@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">ArTunning Monitor</string>
+    <string name="app_tagline">Juken 5 Plus · live ECU</string>
 
     <string name="tab_connect">Connect</string>
     <string name="tab_live">Live</string>
+    <string name="tab_diag">Diagnosa</string>
     <string name="tab_console">Console</string>
 
     <string name="btn_scan">Scan</string>
@@ -24,6 +26,19 @@
     <string name="cd_scan">Pindai perangkat Bluetooth</string>
     <string name="cd_status">Status koneksi</string>
     <string name="cd_send">Kirim frame</string>
+
+    <!-- Diagnosa tab -->
+    <string name="diag_refresh">Muat Ulang</string>
+    <string name="diag_tps_cal">Kalibrasi TPS</string>
+    <string name="diag_tps_volts">%1$.2f V</string>
+    <string name="diag_ecu_model">Model ECU</string>
+    <string name="diag_runtime">Runtime Maintenance</string>
+    <string name="diag_fault_bits">Status Fault (DIAG2)</string>
+    <string name="diag_actuator">Actuator Test</string>
+    <string name="diag_actuator_hint">Kirim opcode test ke ECU — pastikan motor aman &amp; netral.</string>
+    <string name="diag_not_yet">Belum ada data — tekan Muat Ulang.</string>
+    <string name="diag_no_bits">Belum ada bit fault diterima.</string>
+    <string name="diag_empty_val">—</string>
 
     <!-- Foreground service (Android Auto / widget membutuhkan koneksi tetap hidup) -->
     <string name="notif_channel_name">Koneksi ECU</string>

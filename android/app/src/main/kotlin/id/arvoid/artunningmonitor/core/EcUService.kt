@@ -17,6 +17,7 @@ import id.arvoid.artunningmonitor.EcURepository
 import id.arvoid.artunningmonitor.LogDir
 import id.arvoid.artunningmonitor.MainActivity
 import id.arvoid.artunningmonitor.R
+import id.arvoid.artunningmonitor.protocol.DiagParser
 import id.arvoid.artunningmonitor.protocol.FrameCodec
 import id.arvoid.artunningmonitor.protocol.LineSplitter
 import id.arvoid.artunningmonitor.protocol.LiveSession
@@ -90,6 +91,7 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
         super.onCreate()
         createChannel()
         client.listener = this
+        EcURepository.init(this) // persist snapshot widget + push update dari repository
         EcURepository.link = this
     }
 
@@ -101,6 +103,9 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
                 manualClose = false
                 val address = intent.getStringExtra(EXTRA_ADDRESS) ?: run { failStop("Alamat perangkat hilang"); return START_NOT_STICKY }
                 val name = intent.getStringExtra(EXTRA_NAME)
+                // Source of truth: Connecting + clear snapshot basi SEBELUM doConnect appendLog
+                // (idempoten dengan panggilan MainViewModel.beginConnect; nutup START_REDELIVER_INTENT)
+                EcURepository.beginConnect(address, name)
                 // foreground wajib dalam5 dtk setelah startForegroundService
                 startAsForeground(getString(R.string.notif_connecting, name ?: address))
                 scope.launch { doConnect(address, name) }
@@ -204,6 +209,11 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
             if (ReplyDispatch.parse(line).isTelemetry) {
                 TelemetryParser.parse(line)?.let { EcURepository.setTelemetry(it, now) }
             }
+            // Diagnostik: A601 (TPS cal), A602 (diag bits), 9616 (model), B800 (runtime)
+            DiagParser.parseDiag2(line)?.let { EcURepository.setDiagFields(it) }
+            DiagParser.parseTpsCal(line)?.let { EcURepository.setTpsCal(it) }
+            DiagParser.parseEcuModel(line)?.let { EcURepository.setEcuModel(it) }
+            DiagParser.parseRuntime(line)?.let { EcURepository.setRuntime(it) }
         }
         if (session.connected) EcURepository.updateStatus(statusOfSession())
         if (txs.isNotEmpty()) sendFrames(txs)
@@ -298,7 +308,7 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
         lastNotifMs = System.currentTimeMillis()
     }
 
-    /** Update teks notifikasi; throttle1 dtk kecuali dipaksa. Widget ikut diperbarui di sini. */
+    /** Update teks notifikasi; throttle1 dtk kecuali dipaksa. Widget sudah di-push oleh EcURepository. */
     private fun refreshNotification(force: Boolean = false) {
         val now = System.currentTimeMillis()
         if (!force && now - lastNotifMs < 1000) return
@@ -308,8 +318,6 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
             else -> EcURepository.statusLine()
         }
         NotificationManagerCompat.from(this).notify(NOTIF_ID, buildNotification(text))
-        // dorong render ulang widget home (snapshot yang sama, throttle mengikuti notifikasi)
-        id.arvoid.artunningmonitor.widget.TelemetryWidgetUpdater.updateAll(this)
     }
 
     private fun buildNotification(text: String): Notification {

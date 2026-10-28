@@ -33,6 +33,7 @@ data class AppUiState(
     val telemetry: id.arvoid.artunningmonitor.protocol.TelemetrySample? = null,
     val error: String? = null,
     val log: List<LogLine> = emptyList(),
+    val diag: EcURepository.DiagSnapshot = EcURepository.DiagSnapshot(),
 )
 
 data class DeviceItem(val name: String, val address: String)
@@ -54,8 +55,8 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     init {
         // Mirror state + log repository (source of truth) ke UI.
         viewModelScope.launch {
-            combine(EcURepository.state, EcURepository.log) { s, l -> s to l }
-                .collect { (s, l) ->
+            combine(EcURepository.state, EcURepository.log, EcURepository.diag) { s, l, d -> Triple(s, l, d) }
+                .collect { (s, l, d) ->
                     _state.update {
                         it.copy(
                             status = s.status,
@@ -64,6 +65,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                             telemetry = s.telemetry,
                             error = s.error,
                             log = l,
+                            diag = d,
                         )
                     }
                 }
@@ -170,7 +172,10 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
                 _state.update { it.copy(status = ConnStatus.PermissionNeeded) }
                 return@launch
             }
-            // optimis; EcUService akan mengonfirmasi lewat EcURepository
+            // Source of truth = repository: set Connecting + clear telemetry basi SEBELUM
+            // service sempat appendLog (mirror combine akan balik ke Disconnected kalau tidak).
+            EcURepository.beginConnect(address, name)
+            // optimis lokal juga (mirror menyusul dengan nilai sama - tanpa fluktuasi)
             _state.update {
                 it.copy(
                     status = ConnStatus.Connecting,
@@ -197,6 +202,39 @@ class MainViewModel(app: Application) : AndroidViewModel(app) {
     fun stopLive() {
         EcURepository.stopLive()
     }
+
+    /**
+     * Kendali engine via opcode Test protokol Juken (docs/opcodes.json):
+     * START_ENGINE = 0x5007, STOP_ENGINE = 0x5003.
+     * Selalu melalui dialog konfirmasi di UI; log TX masuk tab Console.
+     * @return true bila frame benar-benar diteruskan ke link service (terkirim).
+     */
+    fun startEngine(): Boolean =
+        EcURepository.sendRaw(
+            id.arvoid.artunningmonitor.protocol.FrameCodec.buildLine(
+                id.arvoid.artunningmonitor.protocol.Opcodes.Test.START_ENGINE,
+            ),
+        )
+
+    fun stopEngine(): Boolean =
+        EcURepository.sendRaw(
+            id.arvoid.artunningmonitor.protocol.FrameCodec.buildLine(
+                id.arvoid.artunningmonitor.protocol.Opcodes.Test.STOP_ENGINE,
+            ),
+        )
+
+    /** Minta ECU kirim data diagnostik (TPS cal, diag bits, model, runtime). */
+    fun requestDiagRefresh() {
+        EcURepository.requestDiagRefresh()
+    }
+
+    /**
+     * Kirim actuator test opcode (5001 PUMP, 5002 VVA, 5004 LAMP, 500A MIL,
+     * 500B TEMP_IND, 500C FAN, 500D CHOKE, 500E TACHO).
+     * @return true bila frame diteruskan ke link service.
+     */
+    fun sendActuatorTest(opcode: Int): Boolean =
+        EcURepository.sendActuatorTest(opcode)
 
     /** Kirim frame mentah dari tab Console (auto tambah CRLF bila belum ada). */
     fun sendRaw(text: String) {
