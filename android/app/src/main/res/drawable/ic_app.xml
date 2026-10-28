@@ -1,25 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Ikon app sederhana: cincin gauge (Peringatan: mengikuti palet NomadKit) -->
+<!--
+  Ikon notifikasi: monogram RS — mengikuti palet NomadKit.
+  Lingkaran Sand penuh, piringan krem, huruf R & S monoline (skala lebih besar).
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Background bulat -->
-    <path
-        android:fillColor="#FFFDF7"
-        android:pathData="M54,54m-50,0a50,50,0 1,1 100,0a50,50,0 1,1 -100,0" />
-    <!-- Cincin gauge (Sand) -->
+    <!-- Background bulat Sand -->
     <path
         android:fillColor="#D4A373"
-        android:pathData="M54,54m-38,0a38,38,0 1,1 76,0a38,38,0 1,1 -76,0 M54,54m-30,0a30,30,0 1,0 60,0a30,30,0 1,0 -60,0"
-        android:fillType="evenOdd" />
-    <!-- Jarum (Ocean) -->
+        android:pathData="M54,54m-52,0a52,52,0 1,1 104,0a52,52,0 1,1 -104,0" />
+    <!-- Piringan krem -->
     <path
-        android:fillColor="#0891B2"
-        android:pathData="M54,50 L74,38 L57,57 Z" />
-    <!-- Titik as (Forest) -->
-    <path
-        android:fillColor="#166534"
-        android:pathData="M54,54m-6,0a6,6,0 1,1 12,0a6,6,0 1,1 -12,0" />
+        android:fillColor="#FFFDF7"
+        android:pathData="M54,54m-38,0a38,38,0 1,1 76,0a38,38,0 1,1 -76,0" />
+    <!-- Monogram RS (skala 38/29 dari desain launcher) -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:scaleX="1.31"
+        android:scaleY="1.31">
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#0891B2"
+            android:strokeWidth="6"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:pathData="M41,71 V37 H49 A9,9 0 0 1 49,55 H42 M47.5,55 L57,71" />
+        <path
+            android:fillColor="#00000000"
+            android:strokeColor="#166534"
+            android:strokeWidth="6"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round"
+            android:pathData="M71,44.5 C69.5,40 66.5,37.5 62.5,37.5 C57,37.5 53.5,41 53.5,45.5 C53.5,54.5 65,50.5 65,57.5 C65,61.5 62,64.5 57.5,64.5 C53.5,64.5 50.5,62 49.5,58" />
+    </group>
 </vector>
