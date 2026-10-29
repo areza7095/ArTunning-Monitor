@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
 import android.support.v4.media.MediaBrowserCompat
+import android.support.v4.media.MediaDescriptionCompat
 import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
@@ -45,7 +46,22 @@ class EcUMediaService : MediaBrowserServiceCompat() {
 
     companion object {
         private const val EMPTY_ROOT = "artunning.root"
+        private const val ROOT_ID = "artunning"
+        private const val LIVE_ID = "artunning.live"
         private const val META_THROTTLE_MS = 1000L
+
+        fun start(context: android.content.Context) {
+            val intent = android.content.Intent(context, EcUMediaService::class.java)
+            try {
+                context.startService(intent)
+            } catch (_: Exception) {
+                // background start dibatasi — abaikan; Auto tetap bind via intent-filter
+            }
+        }
+
+        fun stop(context: android.content.Context) {
+            context.stopService(android.content.Intent(context, EcUMediaService::class.java))
+        }
     }
 
     override fun onCreate() {
@@ -170,8 +186,35 @@ class EcUMediaService : MediaBrowserServiceCompat() {
         parentId: String,
         result: Result<MutableList<MediaBrowserCompat.MediaItem>>,
     ) {
-        // Android Auto kategori Media: cukup "now playing" — tree browse kosong.
-        result.sendResult(mutableListOf())
+        // Auto menyaring app dgn browse-tree kosong — return minimal1 root
+        // browsable + sub-item "Live" playable (metadata = telemetri / status).
+        val items = mutableListOf<MediaBrowserCompat.MediaItem>()
+        if (parentId == EMPTY_ROOT) {
+            val rootDesc = MediaDescriptionCompat.Builder()
+                .setMediaId(ROOT_ID)
+                .setTitle(getString(id.arvoid.artunningmonitor.R.string.app_name))
+                .setSubtitle("Telemetri ECU Juken")
+                .build()
+            items.add(
+                MediaBrowserCompat.MediaItem(
+                    rootDesc,
+                    MediaBrowserCompat.MediaItem.FLAG_BROWSABLE,
+                ),
+            )
+        } else if (parentId == ROOT_ID) {
+            val liveDesc = MediaDescriptionCompat.Builder()
+                .setMediaId(LIVE_ID)
+                .setTitle("Live")
+                .setSubtitle("Telemetri live")
+                .build()
+            items.add(
+                MediaBrowserCompat.MediaItem(
+                    liveDesc,
+                    MediaBrowserCompat.MediaItem.FLAG_PLAYABLE,
+                ),
+            )
+        }
+        result.sendResult(items)
     }
 
     override fun onDestroy() {

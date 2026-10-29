@@ -177,10 +177,11 @@ live telemetry is published as a **now-playing track**
    (needs Java; run `desktop-head-unit.jar`).
 2. Plug the phone into the PC (USB) → enable **Unknown sources** in the Android Auto
    developer settings (in DHU: Start head unit → menu ⋮ → Settings → Developer →
-   Unknown sources).
-3. Open the app → Connect to the ECU → open DHU → the app appears under Media →
-   "now playing" = live telemetry.
-4. Phone: Android 9+ (API 28); app minSdk 26 — fine.
+   Unknown sources). Without this, sideloaded apps never appear.
+3. Install the app → open DHU → the app appears under **Media** even before
+   connecting to the ECU (status shows "Tidak tersambung").
+4. Connect to the ECU → "now playing" updates to live telemetry (~1 s).
+5. Phone: Android 9+ (API 28); app minSdk 26 — fine.
 
 ### iOS widget (WidgetKit + App Group)
 

@@ -149,6 +149,7 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
         EcURepository.updateStatus(statusOfSession(), deviceName = name, deviceAddress = address, error = null)
         append(LogDir.Info, "Tersambung ke ${name ?: address}")
         refreshNotification(force = true)
+        startMediaService()
         startTick()
     }
 
@@ -220,6 +221,20 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
         refreshNotification() // throttle di dalamnya
     }
 
+    private fun startMediaService() {
+        try {
+            EcUMediaService.start(this)
+        } catch (_: Exception) {
+        }
+    }
+
+    private fun stopMediaService() {
+        try {
+            EcUMediaService.stop(this)
+        } catch (_: Exception) {
+        }
+    }
+
     private fun handleLinkLost() {
         append(LogDir.Info, "Link lost - tidak ada balasan echo >17 dtk")
         client.close()
@@ -256,6 +271,7 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
                     EcURepository.updateStatus(statusOfSession())
                     append(LogDir.Info, "Reconnect berhasil")
                     refreshNotification(force = true)
+                    startMediaService()
                     startTick()
                     return@launch
                 }
@@ -353,6 +369,7 @@ class EcUService : android.app.Service(), SppClient.Listener, EcURepository.EcUL
         session.onDisconnected()
         splitter.reset()
         client.close()
+        stopMediaService()
     }
 
     private fun failStop(message: String) {
