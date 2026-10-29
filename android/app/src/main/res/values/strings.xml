@@ -46,6 +46,10 @@
     <string name="notif_connecting">Menghubungkan ke %1$s…</string>
     <string name="notif_live">LIVE · %1$s</string>
 
+    <!-- Media playback (Android Auto MediaStyle notification) -->
+    <string name="media_channel_name">Media Telemetri</string>
+    <string name="media_channel_desc">Notifikasi media untuk Android Auto (telemetri ECU sebagai now-playing).</string>
+
     <!-- Widget home screen (Glance) -->
     <string name="widget_description">Telemetri ECU Juken (RPM, TPS, AFR, dll) - mengikuti koneksi aplikasi.</string>
     <string name="widget_config_title">Konfigurasi Widget Telemetri</string>
